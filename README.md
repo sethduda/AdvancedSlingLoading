@@ -4,6 +4,8 @@ SP & MP Compatible. Full replacement for in-game sling loading.
 
 **Features:**
 
+Ropes can no longer attach automatically! You need to either get out of your helicopter or have someone on the ground pick up your cargo ropes and attach them to an object.
+
 All players on board a helicopter are given a "ropes" action. This lets any player deploy, extend, shorten or release cargo ropes.
 
 Once cargo ropes are deployed, any player can go to the end of the rope and pick it up.
