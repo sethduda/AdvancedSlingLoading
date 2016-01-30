@@ -22,6 +22,11 @@ Add **[] execVM "sa_ropes.sqf";** to your init.sqf file.
 
 That's all!
 
+<strong>Video:</strong>
+
+[![View Video](http://img.youtube.com/vi/x1zL-ningQU/0.jpg)](http://www.youtube.com/watch?v=x1zL-ningQU)
+
+
 ---
 
 The MIT License (MIT)
