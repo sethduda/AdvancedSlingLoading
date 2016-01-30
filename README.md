@@ -1,6 +1,6 @@
 # Advanced Sling Loading
 
-SP & MP Compatible
+SP & MP Compatible. Full replacement for in-game sling loading.
 
 **Features:**
 
