@@ -1,5 +1,7 @@
 # Advanced Sling Loading
 
+![alt tag](http://s28.postimg.org/xrh1wzd6l/Capture.png)
+
 SP & MP Compatible. Full replacement for in-game sling loading.
 
 **Features:**
