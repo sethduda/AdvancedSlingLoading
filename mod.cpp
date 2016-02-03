@@ -1,0 +1,12 @@
+name = "Advanced Sling Loading";
+picture = "logo.paa";
+description = "Advanced Sling Loading";
+logo = "logo.paa";
+logoOver = "logo.paa";
+tooltip = "Advanced Sling Loading";
+tooltipOwned = "Advanced Sling Loading Owned";
+overview = "Advanced Sling Loading";
+author = "[SA] Duda";
+overviewPicture = "logo.paa";
+overviewText = "Advanced Sling Loading";
+overviewFootnote = "";
