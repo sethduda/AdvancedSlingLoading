@@ -20,9 +20,16 @@ Players on the ground can detached ropes from an object
 
 **Usage:**
 
-Put **sa_ropes.sqf** in your mission directory.
+Addon:
 
-Add **[] execVM "sa_ropes.sqf";** to your init.sqf file.
+Install via steam (http://steamcommunity.com/sharedfiles/filedetails/?id=615007497). Will apply ropes action to all missions.
+If using on a MP server, only the server needs to have it installed.
+
+Script:
+
+Put https://github.com/sethduda/AdvancedSlingLoading/blob/master/addons/SA_AdvancedSlingLoading/functions/fn_advancedSlingLoadingInit.sqf in your mission directory.
+
+Add **[] execVM "fn_advancedSlingLoadingInit.sqf";** to your init.sqf file.
 
 That's all!
 
