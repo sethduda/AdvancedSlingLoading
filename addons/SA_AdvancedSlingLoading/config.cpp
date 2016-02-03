@@ -8,6 +8,7 @@ class CfgPatches
 	};
 };
 
+/*
 class CfgVehicles
 {
 	class Logic;
@@ -53,6 +54,7 @@ class CfgVehicles
 		};
 	};
 };
+*/
 
 class CfgFunctions 
 {
@@ -61,7 +63,7 @@ class CfgFunctions
 		class AdvancedSlingLoading
 		{
 			file = "\SA_AdvancedSlingLoading\functions";
-			class advancedSlingLoadingInit{};
+			class advancedSlingLoadingInit{postInit=1};
 		};
 	};
 };

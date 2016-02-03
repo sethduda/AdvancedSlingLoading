@@ -11,6 +11,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 {
 
+if(!isNil "SA_ROPE_INIT" || !hasInterface) exitWith {};
+
+SA_ROPE_INIT = true;
+
 SA_Rope_Get_Lift_Capability = {
 	private ["_heli","_heliType"];
 	_heli = [_this,0] call BIS_fnc_param;
