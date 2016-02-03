@@ -179,19 +179,23 @@ SA_Rope_Attach_Cargo_Ropes = {
 			[{ hint "The ropes are too short. Extend them." },"BIS_fnc_spawn",_player] call BIS_fnc_MP;
 		} else {
 			[_heli,_player] call SA_Rope_Drop_Cargo_Ropes;
+
+			_centerOfMass = getCenterOfMass _target;
 			_bbr = boundingBoxReal _target;
 			_p1 = _bbr select 0;
 			_p2 = _bbr select 1;
-			_x1 = (_p1 select 0);
-			_y1 = (_p1 select 1);
-			_z1 = (_p1 select 2);
-			_x2 = (_p2 select 0);
-			_y2 = (_p2 select 1);
-			_z2 = (_p2 select 2);
-			[_target, [_x1/2,_y1/2,0], [0,0,-1]] ropeAttachTo (_ropes select 0);
-			[_target, [_x2/2,_y1/2,0], [0,0,-1]] ropeAttachTo (_ropes select 1);
-			[_target, [_x2/2,_y2/2,0], [0,0,-1]] ropeAttachTo (_ropes select 2);
-			[_target, [_x1/2,_y2/2,0], [0,0,-1]] ropeAttachTo (_ropes select 3);	
+			_maxWidth = abs ((_p2 select 0) - (_p1 select 0));
+			_widthOffset = ((_maxWidth / 2) - abs ( _centerOfMass select 0 )) / 2;
+			_maxLength = abs ((_p2 select 1) - (_p1 select 1));
+			_lengthOffset = ((_maxLength / 2) - abs (_centerOfMass select 1 )) / 2;
+			_maxHeight = abs ((_p2 select 2) - (_p1 select 2));
+			_heightOffset = _maxHeight/6;
+			
+			[_target, [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 0);
+			[_target, [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 1);
+			[_target, [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 2);
+			[_target, [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 3);	
+			
 			[_target, _heli, _ropes] spawn SA_Rope_Adjust_Mass;		
 		};
 	};
