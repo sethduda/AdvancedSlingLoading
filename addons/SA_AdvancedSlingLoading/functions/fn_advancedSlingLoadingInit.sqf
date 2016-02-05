@@ -196,7 +196,9 @@ SA_Rope_Attach_Cargo_Ropes = {
 			[_target, [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 2);
 			[_target, [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset], [0,0,-1]] ropeAttachTo (_ropes select 3);	
 			
-			[_target, _heli, _ropes] spawn SA_Rope_Adjust_Mass;		
+			if(missionNamespace getVariable ["SA_ASL_HEAVY_LIFTING_ENABLED",true]) then {
+				[_target, _heli, _ropes] spawn SA_Rope_Adjust_Mass;		
+			};	
 		};
 	};
 };
