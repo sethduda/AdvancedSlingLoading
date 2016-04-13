@@ -293,14 +293,18 @@ ASL_Can_Retract_Ropes = {
 ASL_Deploy_Ropes = {
 	params ["_vehicle","_player",["_ropeLength",15]];
 	if(local _vehicle) then {
-		private ["_existingRopes","_cargoRopes"];
+		private ["_existingRopes","_cargoRopes","_startLength"];
 		_existingRopes = _vehicle getVariable ["ASL_Ropes",[]];
 		if(count _existingRopes == 0) then {
+			_startLength = 0;
+			if(vehicle _player == _player) then {
+				_startLength = _ropeLength;
+			};
 			_cargoRopes = [];
-			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", 5]]; 
-			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", 5]]; 
-			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", 5]]; 
-			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", 5]]; 
+			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", _startLength]]; 
+			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", _startLength]]; 
+			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", _startLength]]; 
+			_cargoRopes = _cargoRopes + [ropeCreate [_vehicle, "slingload0", _startLength]]; 
 			_vehicle setVariable ["ASL_Ropes",_cargoRopes,true];
 			{
 				ropeUnwind [_x, 5, _ropeLength];
