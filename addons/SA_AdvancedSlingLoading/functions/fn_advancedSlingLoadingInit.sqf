@@ -69,7 +69,7 @@ ASL_Rope_Adjust_Mass = {
 				_endDistance = (_ends select 0) distance (_ends select 1);
 				_ropeLength = ropeLength _x;
 				if((_ropeLength - 2) <= _endDistance && ((position _heli) select 2) > 0 ) then {
-					[[_obj, ((_lift select 0)*0.8)],"ASL_Rope_Set_Mass",_obj,false,true] spawn BIS_fnc_MP;
+					[[_obj, ((_lift select 0)*0.8)],"ASL_Rope_Set_Mass",_obj,true] call ASL_RemoteExec;
 					_originalMassSet = false;
 				};
 			} forEach _ropes;
@@ -78,7 +78,7 @@ ASL_Rope_Adjust_Mass = {
 		while { _obj in (ropeAttachedObjects _heli) } do {
 			sleep 0.5;
 		};
-		[[_obj, _originalMass],"ASL_Rope_Set_Mass",_obj,false,true] spawn BIS_fnc_MP;
+		[[_obj, _originalMass],"ASL_Rope_Set_Mass",_obj,true] call ASL_RemoteExec;
 	};	
 };
 	
