@@ -5,11 +5,12 @@ SP & MP Compatible. Full replacement for in-game sling loading. Supports Exile.
 **Features:**
 
  - Ropes can no longer attach automatically! You need to either get out of your helicopter or have someone on the ground pick up your cargo ropes and attach them to an object. 
+ - Helicopters support up to 3 sets of cargo ropes, depending on the size of the heli.
  - Once cargo ropes are deployed, any player can go to the end of the rope and pick it up. 
  - Once the ropes are picked up by a player, they can be attached to pretty much every object in the game. 
  - Players can drop ropes if they're carrying them
  - Players on the ground can detached ropes from an object 
- - Huron, Mohawk & Taru can lift heavy vehicles 
+ - Helicopters can lift heavy vehicles 
 
 **Installation:**
 
@@ -65,7 +66,7 @@ setvariable.txt
 
 Add the following exclusions to the end of all lines starting with 4, 5, 6, or 7 if they contain "" (meaning applies to all values): 
 
-!="ASL_Ropes" !="ASL_Ropes_Vehicle" !="ASL_Ropes_Pick_Up_Helper" 
+!="ASL_Ropes" !="ASL_Ropes_Vehicle" !="ASL_Ropes_Pick_Up_Helper" !="ASL_Cargo"
 
 setvariableval.txt 
 
@@ -73,7 +74,7 @@ If you have any lines starting with 4, 5, 6, or 7 and they contain "" (meaning a
 
 Also, it's possible there are other battleye filter files that can cause issues. If you check your battleye logs you can figure out which file is causing a problem.
 
-*The tow actions appear when looking at a vehicle, but do nothing when I select them. How do I fix that?*
+*The sling actions appear when looking at a vehicle, but do nothing when I select them. How do I fix that?*
 
 Most likely your server is setup with a white list for remote executions. In order to fix this, you need to modify your mission's description.ext file, adding the following CfgRemoteExec rules. If using InfiStar you should edit your cfgremoteexec.hpp instead of the description.ext file. See https://community.bistudio.com/wiki/Arma_3_Remote_Execution for more details on CfgRemoteExec.
 
@@ -87,7 +88,6 @@ class CfgRemoteExec
 		class ASL_Release_Cargo		{ allowedTargets=0; }; 
 		class ASL_Retract_Ropes	{ allowedTargets=0; }; 
 		class ASL_Deploy_Ropes	{ allowedTargets=0; }; 
-		class ASL_Put_Away_Ropes		{ allowedTargets=0; }; 
 		class ASL_Attach_Ropes		{ allowedTargets=0; }; 
 		class ASL_Drop_Ropes		{ allowedTargets=0; }; 
 		class ASL_Hint			{ allowedTargets=1; }; 
