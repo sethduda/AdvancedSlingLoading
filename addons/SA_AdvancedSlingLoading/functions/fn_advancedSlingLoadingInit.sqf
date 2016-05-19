@@ -1144,7 +1144,7 @@ if(isServer) then {
 		};
 	};
 	
-	ASL_SUPPORTED_REMOTEEXECCLIENT_FUNCTIONS = ["ASL_Deploy_Ropes_Index","ASL_Rope_Set_Mass","ASL_Extend_Ropes","ASL_Shorten_Ropes","ASL_Release_Cargo","ASL_Retract_Ropes","ASL_Deploy_Ropes","ASL_Put_Away_Ropes","ASL_Hint","ASL_Attach_Ropes","ASL_Drop_Ropes"];
+	ASL_SUPPORTED_REMOTEEXECCLIENT_FUNCTIONS = ["ASL_Pickup_Ropes","ASL_Deploy_Ropes_Index","ASL_Rope_Set_Mass","ASL_Extend_Ropes","ASL_Shorten_Ropes","ASL_Release_Cargo","ASL_Retract_Ropes","ASL_Deploy_Ropes","ASL_Put_Away_Ropes","ASL_Hint","ASL_Attach_Ropes","ASL_Drop_Ropes"];
 	
 	ExileServer_AdvancedSlingLoading_network_AdvancedSlingLoadingRemoteExecClient = {
 		params ["_sessionId", "_messageParameters"];
