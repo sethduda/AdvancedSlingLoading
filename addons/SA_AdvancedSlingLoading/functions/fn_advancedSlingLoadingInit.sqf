@@ -56,6 +56,7 @@ ASL_Get_Sling_Load_Points = {
 			};
 		} forEach _surfaces;
 		if(count _intersectionASL > 0) then {
+			_intersectionASL = _intersectionASL vectorAdd (( _surfaceIntersectStartASL vectorFromTo _surfaceIntersectEndASL ) vectorMultiply 0.2);
 			_slingLoadPoints pushBack (_vehicle worldToModelVisual (ASLToAGL _intersectionASL));
 		} else {
 			_slingLoadPoints pushBack [];
@@ -1174,4 +1175,3 @@ diag_log "Advanced Sling Loading Loaded";
 if(isServer) then {
 	[] call ASL_Advanced_Sling_Loading_Install;
 };
-
