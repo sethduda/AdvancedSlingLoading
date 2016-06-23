@@ -28,9 +28,18 @@ ASL_Rope_Get_Lift_Capability = {
 	_slingLoadMaxCargoMass;	
 };
 
+// Defines number of meters to move the sling load point up/down
+// from the dynamically calculated sling load position. This is needed
+// because the dynamic sling load position sometimes is slightly inside
+// the helicopter, causing damage to the vehicle.
+
+ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET = [
+	["All", [-0.2, -0.2, -0.2]]
+];
+
 ASL_Get_Sling_Load_Points = {
 	params ["_vehicle"];
-	private ["_slingLoadPointsArray","_cornerPoints","_rearCenterPoint","_vehicleUnitVectorUp"];
+	private ["_slingLoadPointsArray","_cornerPoints","_rearCenterPoint","_vehicleUnitVectorUp","_slingLoadPointHeightOffset"];
 	private ["_slingLoadPoints","_modelPoint","_modelPointASL","_surfaceIntersectStartASL","_surfaceIntersectEndASL","_surfaces","_intersectionASL","_intersectionObject"];
 	_slingLoadPointsArray = [];
 	_cornerPoints = [_vehicle] call ASL_Get_Corner_Points;
@@ -40,6 +49,13 @@ ASL_Get_Sling_Load_Points = {
 	_frontCenterPoint = ((_rearCenterPoint vectorDiff _frontCenterPoint) vectorMultiply 0.2) vectorAdd _frontCenterPoint;
 	_middleCenterPoint = ((_frontCenterPoint vectorDiff _rearCenterPoint) vectorMultiply 0.5) vectorAdd _rearCenterPoint;
 	_vehicleUnitVectorUp = vectorNormalized (vectorUp _vehicle);
+	
+	_slingLoadPointHeightOffset = 0;
+	{
+		if(_vehicle isKindOf (_x select 0)) then {
+			_slingLoadPointHeightOffset = (_x select 1);
+		};
+	} forEach ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET;
 	
 	_slingLoadPoints = [];
 	{
@@ -56,7 +72,7 @@ ASL_Get_Sling_Load_Points = {
 			};
 		} forEach _surfaces;
 		if(count _intersectionASL > 0) then {
-			_intersectionASL = _intersectionASL vectorAdd (( _surfaceIntersectStartASL vectorFromTo _surfaceIntersectEndASL ) vectorMultiply 0.2);
+			_intersectionASL = _intersectionASL vectorAdd (( _surfaceIntersectStartASL vectorFromTo _surfaceIntersectEndASL ) vectorMultiply (-1 * (_slingLoadPointHeightOffset select (count _slingLoadPoints))));
 			_slingLoadPoints pushBack (_vehicle worldToModelVisual (ASLToAGL _intersectionASL));
 		} else {
 			_slingLoadPoints pushBack [];
