@@ -28,6 +28,11 @@ ASL_Rope_Get_Lift_Capability = {
 	_slingLoadMaxCargoMass;	
 };
 
+ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET = [
+	["All", [-0.05, -0.05, -0.05]],
+	["CUP_B_CH47F_USA", [-0.05, -2, -0.05]]
+];
+
 ASL_Get_Sling_Load_Points = {
 	params ["_vehicle"];
 	private ["_slingLoadPointsArray","_cornerPoints","_rearCenterPoint","_vehicleUnitVectorUp"];
@@ -41,13 +46,39 @@ ASL_Get_Sling_Load_Points = {
 	_middleCenterPoint = ((_frontCenterPoint vectorDiff _rearCenterPoint) vectorMultiply 0.5) vectorAdd _rearCenterPoint;
 	_vehicleUnitVectorUp = vectorNormalized (vectorUp _vehicle);
 	
+	_slingLoadPointHeightOffset = 0;
+	{
+		if(_vehicle isKindOf (_x select 0)) then {
+			_slingLoadPointHeightOffset = (_x select 1);
+		};
+	} forEach ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET;
+	
 	_slingLoadPoints = [];
 	{
 		_modelPoint = _x;
 		_modelPointASL = AGLToASL (_vehicle modelToWorldVisual _modelPoint);
-		_surfaceIntersectStartASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply 5 );
-		_surfaceIntersectEndASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply -5 );
-		_surfaces = lineIntersectsSurfaces [_surfaceIntersectStartASL, _surfaceIntersectEndASL, objNull, objNull, false, 100];
+		_surfaceIntersectStartASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply -5 );
+		_surfaceIntersectEndASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply 5 );
+		
+		// Determine if the surface intersection line crosses below ground level
+		// If if does, move surfaceIntersectStartASL above ground level (lineIntersectsSurfaces
+		// doesn't work if starting below ground level for some reason
+		// See: https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
+		
+		_la = ASLToAGL _surfaceIntersectStartASL;
+		_lb = ASLToAGL _surfaceIntersectEndASL;
+		
+		if(_la select 2 < 0 && _lb select 2 > 0) then {
+			_n = [0,0,1];
+			_p0 = [0,0,0];
+			_l = (_la vectorFromTo _lb);
+			if((_l vectorDotProduct _n) != 0) then {
+				_d = ( ( _p0 vectorAdd ( _la vectorMultiply -1 ) ) vectorDotProduct _n ) / (_l vectorDotProduct _n);
+				_surfaceIntersectStartASL = AGLToASL ((_l vectorMultiply _d) vectorAdd _la);
+			};
+		};
+		
+		_surfaces = lineIntersectsSurfaces [_surfaceIntersectStartASL, _surfaceIntersectEndASL, objNull, objNull, true, 100];
 		_intersectionASL = [];
 		{
 			_intersectionObject = _x select 2;
@@ -56,7 +87,7 @@ ASL_Get_Sling_Load_Points = {
 			};
 		} forEach _surfaces;
 		if(count _intersectionASL > 0) then {
-			_intersectionASL = _intersectionASL vectorAdd (( _surfaceIntersectStartASL vectorFromTo _surfaceIntersectEndASL ) vectorMultiply 0.2);
+			_intersectionASL = _intersectionASL vectorAdd (( _surfaceIntersectStartASL vectorFromTo _surfaceIntersectEndASL ) vectorMultiply (_slingLoadPointHeightOffset select (count _slingLoadPoints)));
 			_slingLoadPoints pushBack (_vehicle worldToModelVisual (ASLToAGL _intersectionASL));
 		} else {
 			_slingLoadPoints pushBack [];
