@@ -30,7 +30,8 @@ ASL_Rope_Get_Lift_Capability = {
 
 ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET = [
 	["All", [-0.05, -0.05, -0.05]],
-	["CUP_B_CH47F_USA", [-0.05, -2, -0.05]]
+	["CUP_CH47F_base", [-0.05, -2, -0.05]],
+	["RHS_CH_47F", [-0.05, -2, -0.05]]
 ];
 
 ASL_Get_Sling_Load_Points = {
@@ -107,48 +108,6 @@ ASL_Get_Sling_Load_Points = {
 	};
 	_slingLoadPointsArray;
 };
-
-/*
-ASL_Get_Sling_Load_Points = {
-	params ["_vehicle"];
-	private ["_slingLoadPointsArray","_cornerPoints","_rearCenterPoint","_frontToRearUnitVector","_vehicleLength","_vehicleUnitVectorUp","_numberOfSlingsCount","_distanceBetweenSlings"];
-	private ["_slingLoadPoints","_modelPoint","_modelPointASL","_surfaceIntersectStartASL","_surfaceIntersectEndASL","_surfaces","_intersectionASL","_intersectionObject"];
-	_slingLoadPointsArray = [];
-	_cornerPoints = [_vehicle] call ASL_Get_Corner_Points;
-	_frontCenterPoint = (((_cornerPoints select 2) vectorDiff (_cornerPoints select 3)) vectorMultiply 0.5) vectorAdd (_cornerPoints select 3);
-	_rearCenterPoint = (((_cornerPoints select 0) vectorDiff (_cornerPoints select 1)) vectorMultiply 0.5) vectorAdd (_cornerPoints select 1);
-	_frontToRearUnitVector = _frontCenterPoint vectorFromTo _rearCenterPoint;
-	_vehicleLength = _frontCenterPoint distance _rearCenterPoint;
-	_vehicleUnitVectorUp = vectorNormalized (vectorUp _vehicle);
-	_numberOfSlingsCount = 1;
-	while {_vehicleLength / (_numberOfSlingsCount + 1) >= 3 || _numberOfSlingsCount == 1} do {
-		_distanceBetweenSlings = _vehicleLength / (_numberOfSlingsCount + 1);
-		_slingLoadPoints = [];
-		for "_i" from 1 to _numberOfSlingsCount do {
-			_modelPoint = _frontCenterPoint vectorAdd (_frontToRearUnitVector vectorMultiply (_distanceBetweenSlings * _i));
-			_modelPointASL = AGLToASL (_vehicle modelToWorldVisual _modelPoint);
-			_surfaceIntersectStartASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply 5 );
-			_surfaceIntersectEndASL = _modelPointASL vectorAdd ( _vehicleUnitVectorUp vectorMultiply -5 );
-			_surfaces = lineIntersectsSurfaces [_surfaceIntersectStartASL, _surfaceIntersectEndASL, objNull, objNull, false, 100];
-			_intersectionASL = [];
-			{
-				_intersectionObject = _x select 2;
-				if(_intersectionObject == _vehicle) exitWith {
-					_intersectionASL = _x select 0;
-				};
-			} forEach _surfaces;
-			if(count _intersectionASL == 0) exitWith {};
-			_slingLoadPoints pushBack (_vehicle worldToModelVisual (ASLToAGL _intersectionASL));
-		};
-		if(count _slingLoadPoints == _numberOfSlingsCount) then {
-			_slingLoadPointsArray pushBack _slingLoadPoints;
-		};
-		if(count _slingLoadPoints != _numberOfSlingsCount) exitWith {};
-		_numberOfSlingsCount = _numberOfSlingsCount + 1;
-	};
-	_slingLoadPointsArray;
-};
-*/
 
 ASL_Rope_Set_Mass = {
 	private ["_obj","_mass"];
