@@ -32,7 +32,7 @@ class CfgFunctions
 		class AdvancedSlingLoading
 		{
 			file = "\SA_AdvancedSlingLoading\functions";
-			class advancedSlingLoadingInit{postInit=1};
+			class advancedSlingLoadingInit{postInit=1;};
 		};
 	};
 };
