@@ -73,7 +73,7 @@ ASL_Get_Sling_Load_Points = {
 		
 		if(_la select 2 < 0 && _lb select 2 > 0) then {
 			_n = [0,0,1];
-			_p0 = [0,0,0];
+			_p0 = [0,0,0.1];
 			_l = (_la vectorFromTo _lb);
 			if((_l vectorDotProduct _n) != 0) then {
 				_d = ( ( _p0 vectorAdd ( _la vectorMultiply -1 ) ) vectorDotProduct _n ) / (_l vectorDotProduct _n);
