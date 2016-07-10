@@ -946,7 +946,8 @@ ASL_Can_Pickup_Ropes = {
 };
 
 ASL_SUPPORTED_VEHICLES = [
-	"Helicopter"
+	"Helicopter",
+	"VTOL_Base_F"
 ];
 
 ASL_Is_Supported_Vehicle = {
