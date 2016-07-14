@@ -964,7 +964,7 @@ ASL_Is_Supported_Vehicle = {
 };
 
 ASL_SLING_RULES = [
-	["Helicopter","CAN_SLING","All"]
+	["All","CAN_SLING","All"]
 ];
 
 ASL_Is_Supported_Cargo = {
