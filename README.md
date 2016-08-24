@@ -83,9 +83,9 @@ class CfgRemoteExec
 {
 	class Functions
 	{
-		ASL_Pickup_Ropes		{ allowedTargets=0; }; 
-		ASL_Deploy_Ropes_Index		{ allowedTargets=0; }; 
-		ASL_Rope_Set_Mass		{ allowedTargets=0; }; 
+		class ASL_Pickup_Ropes		{ allowedTargets=0; }; 
+		class ASL_Deploy_Ropes_Index	{ allowedTargets=0; }; 
+		class ASL_Rope_Set_Mass		{ allowedTargets=0; }; 
 		class ASL_Extend_Ropes		{ allowedTargets=0; }; 
 		class ASL_Shorten_Ropes		{ allowedTargets=0; }; 
 		class ASL_Release_Cargo		{ allowedTargets=0; }; 
