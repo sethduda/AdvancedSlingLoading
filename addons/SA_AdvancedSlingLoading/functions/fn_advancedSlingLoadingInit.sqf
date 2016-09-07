@@ -1011,7 +1011,7 @@ ASL_Find_Nearby_Vehicles = {
 	private ["_nearVehicles","_nearVehiclesWithRopes","_vehicle","_ends","_end1","_end2"];
 	_nearVehicles = [];
 	{
-		_nearVehicles append  (position player nearObjects [_x, 30]);
+		_nearVehicles append  (player nearObjects [_x, 30]);
 	} forEach (missionNamespace getVariable ["ASL_SUPPORTED_VEHICLES_OVERRIDE",ASL_SUPPORTED_VEHICLES]);
 	_nearVehiclesWithRopes = [];
 	{
@@ -1025,7 +1025,7 @@ ASL_Find_Nearby_Vehicles = {
 					if(count _ends == 2) then {
 						_end1 = _ends select 0;
 						_end2 = _ends select 1;
-						if(((position player) distance _end1) < 5 || ((position player) distance _end2) < 5 ) then {
+						if(((getPosASL player) distance _end1) < 5 || ((getPosASL player) distance _end2) < 5 ) then {
 							_nearVehiclesWithRopes =  _nearVehiclesWithRopes + [_vehicle];
 						}
 					};
