@@ -1008,7 +1008,7 @@ ASL_Hide_Object_Global = {
 };
 
 ASL_Find_Nearby_Vehicles = {
-	private ["_nearVehicles","_nearVehiclesWithRopes","_vehicle","_ends","_end1","_end2"];
+	private ["_nearVehicles","_nearVehiclesWithRopes","_vehicle","_ends","_end1","_end2","_playerPosAGL"];
 	_nearVehicles = [];
 	{
 		_nearVehicles append  (player nearObjects [_x, 30]);
@@ -1025,7 +1025,8 @@ ASL_Find_Nearby_Vehicles = {
 					if(count _ends == 2) then {
 						_end1 = _ends select 0;
 						_end2 = _ends select 1;
-						if(((getPosASL player) distance _end1) < 5 || ((getPosASL player) distance _end2) < 5 ) then {
+						_playerPosAGL = ASLtoAGL getPosASL player;
+						if((_playerPosAGL distance _end1) < 5 || (_playerPosAGL distance _end2) < 5 ) then {
 							_nearVehiclesWithRopes =  _nearVehiclesWithRopes + [_vehicle];
 						}
 					};
