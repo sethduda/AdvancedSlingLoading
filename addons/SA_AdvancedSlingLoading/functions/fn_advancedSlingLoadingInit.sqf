@@ -113,28 +113,26 @@ ASL_Get_Sling_Load_Points = {
 };
 
 ASL_Rope_Set_Mass = {
-	private ["_obj","_mass"];
-	_obj = [_this,0] call BIS_fnc_param;
-	_mass = [_this,1] call BIS_fnc_param;
+	private _obj = [_this,0] call BIS_fnc_param;
+	private _mass = [_this,1] call BIS_fnc_param;
 	_obj setMass _mass;
 };
 
 ASL_Rope_Adjust_Mass = {
 	params ["_obj","_heli",["_ropes",[]]];
-	private ["_mass","_lift","_originalMass","_heavyLiftMinLift"];
-	_lift = [_heli] call ASL_Rope_Get_Lift_Capability;
-	_originalMass = getMass _obj;
-	_heavyLiftMinLift = missionNamespace getVariable ["ASL_HEAVY_LIFTING_MIN_LIFT_OVERRIDE",5000];
-	if( _originalMass >= ((_lift)*0.8) && _lift >= _heavyLiftMinLift ) then {
-		private ["_originalMassSet","_ends","_endDistance","_ropeLength"];
-		_originalMassSet = (getMass _obj) == _originalMass;
+	private _lift = [_heli] call ASL_Rope_Get_Lift_Capability;
+	private _maxLiftableMass = _lift * 8;
+	private _originalMass = getMass _obj;
+	private _heavyLiftMinLift = missionNamespace getVariable ["ASL_HEAVY_LIFTING_MIN_LIFT_OVERRIDE",5000];
+	if( _originalMass >= ((_lift)*0.8) && _lift >= _heavyLiftMinLift && _originalMass <= _maxLiftableMass) then {
+		private _originalMassSet = (getMass _obj) == _originalMass;
 		while { _obj in (ropeAttachedObjects _heli) && _originalMassSet } do {
 			{
-				_ends = ropeEndPosition _x;
-				_endDistance = (_ends select 0) distance (_ends select 1);
-				_ropeLength = ropeLength _x;
+				private _ends = ropeEndPosition _x;
+				private _endDistance = (_ends select 0) distance (_ends select 1);
+				private _ropeLength = ropeLength _x;
 				if((_ropeLength - 2) <= _endDistance && ((position _heli) select 2) > 0 ) then {
-					[[_obj, ((_lift)*0.8)],"ASL_Rope_Set_Mass",_obj,true] call ASL_RemoteExec;
+					[[_obj, (_lift * 0.8 + ((_originalMass / _maxLiftableMass) * (_lift * 0.2)))],"ASL_Rope_Set_Mass",_obj,true] call ASL_RemoteExec;
 					_originalMassSet = false;
 				};
 			} forEach _ropes;
@@ -146,7 +144,6 @@ ASL_Rope_Adjust_Mass = {
 		[[_obj, _originalMass],"ASL_Rope_Set_Mass",_obj,true] call ASL_RemoteExec;
 	};	
 };
-
 
 /*
  Constructs an array of all active rope indexes and position labels (e.g. [[rope index,"Front"],[rope index,"Rear"]])
