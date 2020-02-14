@@ -20,12 +20,11 @@ ASL_Advanced_Sling_Loading_Install = {
 
 	ASL_Rope_Get_Lift_Capability = {
 		params ["_vehicle"];
-		private ["_slingLoadMaxCargoMass"];
-		_slingLoadMaxCargoMass = getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "slingLoadMaxCargoMass");
+		private _slingLoadMaxCargoMass = getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "slingLoadMaxCargoMass");
 		if (_slingLoadMaxCargoMass <= 0) then {
 			_slingLoadMaxCargoMass = 4000;
 		};
-		_slingLoadMaxCargoMass;	
+		_slingLoadMaxCargoMass
 	};
 
 	ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET = [  
@@ -74,7 +73,7 @@ ASL_Advanced_Sling_Loading_Install = {
 				private _p0 = [0, 0, 0.1];
 				private _l = (_la vectorFromTo _lb);
 				if ((_l vectorDotProduct _n) != 0) then {
-					private _d = ((_p0 vectorAdd (_la vectorMultiply -1)) vectorDotProduct _n ) / (_l vectorDotProduct _n);
+					private _d = ((_p0 vectorAdd (_la vectorMultiply -1)) vectorDotProduct _n) / (_l vectorDotProduct _n);
 					_surfaceIntersectStartASL = AGLToASL ((_l vectorMultiply _d) vectorAdd _la);
 				};
 			};
@@ -123,7 +122,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _originalMass = getMass _obj;
 		private _heavyLiftMinLift = missionNamespace getVariable ["ASL_HEAVY_LIFTING_MIN_LIFT_OVERRIDE", 5000];
 		// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10%11", time, "s  (ASL_Rope_Adjust_Mass) _obj: ", _obj, "    _originalMass: ", _originalMass, "    _heli: ", _heli, "    _lift: ", _lift, "    _heavyLiftMinLift: ", _heavyLiftMinLift];
-		if (_originalMass >= ((_lift)*0.8) && _lift >= _heavyLiftMinLift && _originalMass <= _maxLiftableMass) then {
+		if (_originalMass >= ((_lift) * 0.8) && _lift >= _heavyLiftMinLift && _originalMass <= _maxLiftableMass) then {
 			private _originalMassSet = (getMass _obj) == _originalMass;
 			while {_obj in (ropeAttachedObjects _heli) && _originalMassSet} do {
 				{
@@ -274,7 +273,7 @@ ASL_Advanced_Sling_Loading_Install = {
 				player setVariable ["ASL_Extend_Index_Vehicle", _vehicle];
 				["Extend Cargo Ropes","ASL_Extend_Ropes_Index_Action", _activeRopes] call ASL_Show_Select_Ropes_Menu;
 			} else {
-				if(count _activeRopes == 1) then {
+				if (count _activeRopes == 1) then {
 					[_vehicle, player, (_activeRopes select 0) select 0] call ASL_Extend_Ropes;
 				};
 			};
@@ -389,11 +388,11 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _vehicle = vehicle player;
 		if ([_vehicle] call ASL_Can_Release_Cargo) then {
 			private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes_With_Cargo;
-			if(count _activeRopes > 1) then {
+			if (count _activeRopes > 1) then {
 				player setVariable ["ASL_Release_Cargo_Index_Vehicle", _vehicle];
 				["Release Cargo", "ASL_Release_Cargo_Index_Action", _activeRopes, "Cargo"] call ASL_Show_Select_Ropes_Menu;
 			} else {
-				if(count _activeRopes == 1) then {
+				if (count _activeRopes == 1) then {
 					[_vehicle, player, (_activeRopes select 0) select 0] call ASL_Release_Cargo;
 				};
 			};
@@ -403,7 +402,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	ASL_Release_Cargo_Index_Action = {
 		params ["_ropesIndex"];
 		private _vehicle = player getVariable ["ASL_Release_Cargo_Index_Vehicle", objNull];
-		if(_ropesIndex >= 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Release_Cargo) then {
+		if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Release_Cargo) then {
 			[_vehicle, player, _ropesIndex] call ASL_Release_Cargo;
 		};
 	};
@@ -433,7 +432,7 @@ ASL_Advanced_Sling_Loading_Install = {
 			if (isNull _existingCargo) then {
 				_this call ASL_Drop_Ropes;
 				{
-					[_x,_vehicle] spawn {
+					[_x, _vehicle] spawn {
 						params ["_rope", "_vehicle"];
 						private _count = 0;
 						ropeUnwind [_rope, 3, 0];
@@ -538,7 +537,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	ASL_Deploy_Ropes_Index = {
 		params ["_vehicle", "_player", ["_ropesIndex", 0], ["_ropeLength", 15]];
 		if (local _vehicle) then {
-			private _existingRopes = [_vehicle,_ropesIndex] call ASL_Get_Ropes;
+			private _existingRopes = [_vehicle, _ropesIndex] call ASL_Get_Ropes;
 			private _existingRopesCount = [_vehicle] call ASL_Get_Ropes_Count;
 			if (count _existingRopes == 0) then {
 				private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
@@ -658,11 +657,11 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _bbr 			= boundingBoxReal _vehicle;
 		private _p1 			= _bbr select 0;
 		private _p2 			= _bbr select 1;
-		private _maxWidth 		= abs ((_p2 select 0) - (_p1 select 0));
-		private _widthOffset 	= ((_maxWidth / 2) - abs (_centerOfMass select 0)) * _widthFactor;
-		private _maxLength 		= abs ((_p2 select 1) - (_p1 select 1));
-		private _lengthOffset 	= ((_maxLength / 2) - abs (_centerOfMass select 1)) * _lengthFactor;
-		private _maxHeight 		= abs ((_p2 select 2) - (_p1 select 2));
+		private _maxWidth 		= abs((_p2 select 0) - (_p1 select 0));
+		private _widthOffset 	= ((_maxWidth / 2) - abs(_centerOfMass select 0)) * _widthFactor;
+		private _maxLength 		= abs((_p2 select 1) - (_p1 select 1));
+		private _lengthOffset 	= ((_maxLength / 2) - abs(_centerOfMass select 1)) * _lengthFactor;
+		private _maxHeight 		= abs((_p2 select 2) - (_p1 select 2));
 		private _heightOffset 	= _maxHeight / 6;
 		private _rearCorner 	= [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
 		private _rearCorner2 	= [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
@@ -673,7 +672,7 @@ ASL_Advanced_Sling_Loading_Install = {
 
 	ASL_Attach_Ropes = {
 		params ["_cargo", "_player"];
-		private _vehicleWithIndex = _player getVariable ["ASL_Ropes_Vehicle", [objNull,0]];
+		private _vehicleWithIndex = _player getVariable ["ASL_Ropes_Vehicle", [objNull, 0]];
 		private _vehicle = _vehicleWithIndex select 0;
 		if (!isNull _vehicle) then {
 			if (local _vehicle) then {
@@ -715,7 +714,7 @@ ASL_Advanced_Sling_Loading_Install = {
 					_canBeAttached = false;
 				};
 			};
-			if !(missionNamespace getVariable ["ASL_EXILE_SAFEZONE_ENABLED",false]) then {
+			if !(missionNamespace getVariable ["ASL_EXILE_SAFEZONE_ENABLED", false]) then {
 				if (!isNil "ExilePlayerInSafezone") then {
 					if ( ExilePlayerInSafezone ) then {
 						["Cannot attach cargo ropes in safe zone", false] call ASL_Hint;
@@ -841,7 +840,7 @@ ASL_Advanced_Sling_Loading_Install = {
 			private _closestRope = [] call ASL_Get_Closest_Rope;
 			if (!isNull (_closestRope select 0)) then {
 				private _canPickupRopes = true;
-				if !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED",false]) then {
+				if !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false]) then {
 					if (locked (_closestRope select 0) > 1) then {
 						["Cannot pick up cargo ropes from locked vehicle", false] call ASL_Hint;
 						_canPickupRopes = false;
@@ -868,13 +867,11 @@ ASL_Advanced_Sling_Loading_Install = {
 	];
 
 	ASL_Is_Supported_Vehicle = {
-		params ["_vehicle", "_isSupported"];
-		_isSupported = false;
+		params ["_vehicle"];
+		private _isSupported = false;
 		if (not isNull _vehicle) then {
 			{
-				if (_vehicle isKindOf _x) then {
-					_isSupported = true;
-				};
+				if (_vehicle isKindOf _x) exitWith {_isSupported = true};
 			} forEach (missionNamespace getVariable ["ASL_SUPPORTED_VEHICLES_OVERRIDE", ASL_SUPPORTED_VEHICLES]);
 		};
 		_isSupported
@@ -926,7 +923,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	ASL_Find_Nearby_Vehicles = {
 		private _nearVehicles = [];
 		{
-			_nearVehicles append  (player nearObjects [_x, 30]);
+			_nearVehicles append (player nearObjects [_x, 30]);
 		} forEach (missionNamespace getVariable ["ASL_SUPPORTED_VEHICLES_OVERRIDE", ASL_SUPPORTED_VEHICLES]);
 		private _nearVehiclesWithRopes = [];
 		{
