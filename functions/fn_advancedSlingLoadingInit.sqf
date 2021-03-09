@@ -436,9 +436,17 @@ ASL_Release_Cargo_Index_Action = {
 	};
 };
 
+// ASL_Release_Cargo_Action_Check = {
+	// if (vehicle player == player) exitWith {false};
+	// [vehicle player] call ASL_Can_Release_Cargo;
+// };
+
 ASL_Release_Cargo_Action_Check = {
-	if (vehicle player == player) exitWith {false};
-	[vehicle player] call ASL_Can_Release_Cargo;
+	params ["_parThis", "_parTarget"];
+	diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Release_Cargo_Action_Check) _parThis: ", _parThis, "   _parTarget: ", _parTarget];
+	// if (vehicle player == player) exitWith {false};
+	// [vehicle player] call ASL_Can_Release_Cargo;
+	false
 };
 
 ASL_Can_Release_Cargo = {
@@ -1041,10 +1049,14 @@ ASL_Add_Player_Actions = {
 		[] call ASL_Shorten_Ropes_Action;
 	}, nil, 0, false, true, "", "call ASL_Shorten_Ropes_Action_Check"];
 		
+	// player addAction ["Release Cargo", { 
+		// [] call ASL_Release_Cargo_Action;
+	// }, nil, 0, false, true, "", "call ASL_Release_Cargo_Action_Check"];
+	
 	player addAction ["Release Cargo", { 
 		[] call ASL_Release_Cargo_Action;
-	}, nil, 0, false, true, "", "call ASL_Release_Cargo_Action_Check"];
-		
+	}, nil, 0, false, true, "", "[_target, _this] call ASL_Release_Cargo_Action_Check"];
+
 	player addAction ["Retract Cargo Ropes", { 
 		[] call ASL_Retract_Ropes_Action;
 	}, nil, 0, false, true, "", "call ASL_Retract_Ropes_Action_Check"];
