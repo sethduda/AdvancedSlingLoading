@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project name="NIC_AdvancedSlingLoading">
+    <Package name="NIC_ASL">
+		<Key ID="STR_ASL_TITLE">
+            <Original>NIC Advanced Sling Loading</Original>
+            <German>NIC Fortgeschrittene Schlinglast</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_LENGTH">
+            <Original>Maximum Rope Lenth</Original>
+            <German>Maximale Seillänge</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_LENGTH_TIP">
+            <Original>Maximum rope lenth in meter from vehicle to load.</Original>
+            <German>Maximale Seillänge in Meter vom Fahrzeug bis zur Ladung.</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DIST">
+            <Original>Maximal Deploy / Retract Range</Original>
+            <German>Maximale Ausfahr- / Einfahrreichweite</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DIST_TIP">
+            <Original>When player is on foot, maximal range in meter from player to vehicle, up to whitch deploying / retracting ropes is possible.</Original>
+            <German>Wenn Spieler zu Fuß ist, maximale Reichweite in Meter von Spieler zu Fahrzeug, bis zu welcher Seile Aus- oder Eingefahren werden können.</German>
+        </Key>
+		<Key ID="STR_ASL_PILOT">
+            <Original>Pilots</Original>
+            <German>Piloten</German>
+        </Key>
+		<Key ID="STR_ASL_PILOT_TIP">
+            <Original>Pilots are authorized to manipulate vehicle ropes.</Original>
+            <German>Piloten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+        </Key>
+		<Key ID="STR_ASL_COMMANDER">
+            <Original>Commanders</Original>
+            <German>Komandanten</German>
+        </Key>
+		<Key ID="STR_ASL_COMMANDER_TIP">
+            <Original>Commanders are authorized to manipulate vehicle ropes.</Original>
+            <German>Komandanten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+        </Key>
+		<Key ID="STR_ASL_COPILOT">
+            <Original>Copilots</Original>
+            <German>Kopiloten</German>
+        </Key>
+		<Key ID="STR_ASL_COPILOT_TIP">
+            <Original>Copilots are authorized to manipulate vehicle ropes.</Original>
+            <German>Kopiloten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+        </Key>
+		<Key ID="STR_ASL_GUNNER">
+            <Original>Gunners</Original>
+            <German>Kanoniere</German>
+        </Key>
+		<Key ID="STR_ASL_GUNNER_TIP">
+            <Original>Gunner are authorized to manipulate vehicle ropes.</Original>
+            <German>Kanoniere sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+        </Key>
+	</Package>
+</Project>
