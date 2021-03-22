@@ -26,15 +26,6 @@
 ] call CBA_fnc_addSetting;
 
 [
-	"ASL_CommandersAuthorized", 
-    "CHECKBOX",
-	[format[localize "STR_ASL_COMMANDER"], format[localize "STR_ASL_COMMANDER_TIP"]],
-	format[localize "STR_ASL_TITLE"],
-	true,
-    true
-] call CBA_fnc_addSetting;
-
-[
 	"ASL_CopilotsAuthorized", 
     "CHECKBOX",
 	[format[localize "STR_ASL_COPILOT"], format[localize "STR_ASL_COPILOT_TIP"]],
@@ -48,6 +39,34 @@
     "CHECKBOX",
 	[format[localize "STR_ASL_GUNNER"], format[localize "STR_ASL_GUNNER_TIP"]],
 	format[localize "STR_ASL_TITLE"],
-	true,
+	false,
     true
+] call CBA_fnc_addSetting;
+
+[
+	"ASL_PassengersAuthorized",
+    "CHECKBOX",
+	[format[localize "STR_ASL_PASSENGER"], format[localize "STR_ASL_PASSENGER_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	false,
+    true
+] call CBA_fnc_addSetting;
+
+[
+	"ASL_MaxRopeDeployHeight",
+	"SLIDER",
+	[format[localize "STR_ASL_MAX_DEPLOY_HEIGHT"], format[localize "STR_ASL_MAX_DEPLOY_HEIGHT_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[0, 1000, 100, 0],
+    true
+] call CBA_fnc_addSetting;
+
+[
+	"ASL_MinVehicleMass",
+	"SLIDER",
+	[format[localize "STR_ASL_MIN_MASS"], format[localize "STR_ASL_MIN_MASS_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[0, 2000, 0, 0],
+    true,
+	{[] call ASL_Switch_Vehicle_Actions;}													// code executed on option changed AND on init
 ] call CBA_fnc_addSetting;

@@ -53,5 +53,129 @@
             <Original>Gunner are authorized to manipulate vehicle ropes.</Original>
             <German>Kanoniere sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
         </Key>
+		<Key ID="STR_ASL_PASSENGER">
+            <Original>Passengers</Original>
+            <German>Passagiere</German>
+        </Key>
+		<Key ID="STR_ASL_PASSENGER_TIP">
+            <Original>Passengers are authorized to manipulate vehicle ropes.</Original>
+            <German>Passagiere sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DEPLOY_HEIGHT">
+            <Original>Maximum Deploy Height</Original>
+            <German>Maximale Ausfahrhöhe</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DEPLOY_HEIGHT_TIP">
+            <Original>Maximal Height in meter above ground, up to which vehicle ropes are allowed to be deployed.</Original>
+            <German>Maximalhöhe in Meter über Grund, bis zu welcher Frachtseile ausgefahren werden dürfen.</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS">
+            <Original>Minimum Vehicle Mass</Original>
+            <German>Minimales Fahrzeuggewicht</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_TIP">
+            <Original>Minimal mass in kilogram a vehicle has to have, for ropes to be able to be deployed from that vehicle.</Original>
+            <German>Minimales Gewicht in Kilogramm, das ein Fahrzeug haben muss, um Frachtseile von diesem Fahrzeug ausfahren zu können.</German>
+        </Key>
+		<Key ID="STR_ASL_DEPLOY">
+            <Original>Deploy Cargo Ropes</Original>
+            <German>Frachtseile Ausfahren</German>
+        </Key>
+		<Key ID="STR_ASL_RETRACT">
+            <Original>Retract Cargo Ropes</Original>
+            <German>Frachtseile Einfahren</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND">
+            <Original>Extend Cargo Ropes</Original>
+            <German>Frachtseile Verlängern</German>
+        </Key>
+		<Key ID="STR_ASL_SHORTEN">
+            <Original>Shorten Cargo Ropes</Original>
+            <German>Frachtseile Verkürzen</German>
+        </Key>
+		<Key ID="STR_ASL_RELEASE">
+            <Original>Release Cargo</Original>
+            <German>Fracht Ablösen</German>
+        </Key>
+		<Key ID="STR_ASL_PICKUP">
+            <Original>Pickup Cargo Ropes</Original>
+            <German>Frachtseile Aufnehmen</German>
+        </Key>
+		<Key ID="STR_ASL_DROP">
+            <Original>Drop Cargo Ropes</Original>
+            <German>Frachtseile Fallen Lassen</German>
+        </Key>
+		<Key ID="STR_ASL_ATTACH">
+            <Original>Attach To Cargo Ropes</Original>
+            <German>An Frachtseile Befestigen</German>
+        </Key>
+		<Key ID="STR_ASL_CANNOT_DEPLOY">
+            <Original>Cannot deploy cargo ropes from locked vehicle</Original>
+            <German>Frachtseile können von verschlossenen Fahrzeugen nicht ausgefahren werden</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES">
+            <Original>Deploy Ropes</Original>
+            <German>Seile Ausfahren</German>
+        </Key>
+		<Key ID="STR_ASL_SINGLE">
+            <Original>For Single Cargo</Original>
+            <German>Für Einzellne Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_DOUBLE">
+            <Original>For Double Cargo</Original>
+            <German>Für Doppelte Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_TRIPLE">
+            <Original>For Triple Cargo</Original>
+            <German>Für Dreifache Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_DOESNT_SUPPORT">
+            <Original>Vehicle doesn't support cargo ropes</Original>
+            <German>Fahrzeug unterstützt keine Frachtseile</German>
+        </Key>
+		<Key ID="STR_ASL_DOESNT_SUPPORT_X">
+            <Original>Vehicle doesn't support %1 cargo ropes</Original>
+            <German>Fahrzeug unterstützt keine %1 Frachtseile</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY">
+            <Original>Vehicle already has cargo ropes deployed</Original>
+            <German>Fahrzeug hat bereits Frachtseile ausgefahren</German>
+        </Key>
+		<Key ID="STR_ASL_TOO_SHORT">
+            <Original>Cargo ropes too short. Extend ropes or move vehicle closer.</Original>
+            <German>Frachtseile zu kurz. Seile weiter ausfahren oder Fahrzeug näher bringen.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_ATTACH">
+            <Original>Cannot attach cargo ropes to locked vehicle.</Original>
+            <German>Frachtseile können nicht an verschlossene Fahrzeuge befestigt werden.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_SAFE">
+            <Original>Cannot attach cargo ropes in safe zone.</Original>
+            <German>Frachtseile können nicht bfestigt werden in sicheren Zonen.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_PICKUP">
+            <Original>Cannot pick up cargo ropes from locked vehicle.</Original>
+            <German>Frachtseile verschlossener Fahrzeuge können nicht aufgenommen werden.</German>
+        </Key>
+		<Key ID="STR_ASL_ALL">
+            <Original>All</Original>
+            <German>Alle</German>
+        </Key>
+		<Key ID="STR_ASL_ROPE">
+            <Original>Ropes</Original>
+            <German>Seile</German>
+        </Key>
+		<Key ID="STR_ASL_FRONT">
+            <Original>Front</Original>
+            <German>Front</German>
+        </Key>
+		<Key ID="STR_ASL_REAR">
+            <Original>Rear</Original>
+            <German>Heck</German>
+        </Key>
+		<Key ID="STR_ASL_CENTER">
+            <Original>Center</Original>
+            <German>Zentral</German>
+        </Key>
 	</Package>
 </Project>
