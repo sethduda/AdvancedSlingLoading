@@ -1,7 +1,8 @@
 class CfgPatches {
 	class SA_AdvancedSlingLoading {
 		units[]				= {
-			"SA_AdvancedSlingLoading"
+			"SA_AdvancedSlingLoading",
+			"ASL_RopeSmallWeight"
 		};
 		requiredVersion		= 1;
 		requiredAddons[]	= {
@@ -45,6 +46,14 @@ class CfgFunctions {
 class Extended_PreInit_EventHandlers {
 	class SA {
 		init = "call compile preprocessFileLineNumbers '\SA_AdvancedSlingLoading\scripts\XEH_preInit.sqf'"; // CBA_a3 integration
+	};
+};
+class CfgVehicles {
+	class Land_Camping_Light_F;
+	class ASL_RopeSmallWeight : Land_Camping_Light_F {
+		scope		= 2;
+		displayname = "Rope weight";
+		model		= "\SA_AdvancedSlingLoading\ASL_weightSmall";
 	};
 };
 class cfgMods {
