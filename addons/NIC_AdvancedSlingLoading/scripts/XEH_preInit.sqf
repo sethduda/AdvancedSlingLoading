@@ -68,5 +68,5 @@
 	format[localize "STR_ASL_TITLE"],
 	[0, 2000, 0, 0],
     true,
-	{[] call ASL_Switch_Vehicle_Actions;}													// code executed on option changed AND on init
+	{[] call ASL_Switch_Vehicles_Actions}													// code executed on option changed AND on init
 ] call CBA_fnc_addSetting;

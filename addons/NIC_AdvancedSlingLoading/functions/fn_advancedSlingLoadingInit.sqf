@@ -130,6 +130,39 @@ ASL_Advanced_Sling_Loading_Install = {
 		_slingLoadPointsArray;
 	};
 	
+	ASL_Get_Corner_Points = {
+		params ["_vehicle"];
+		
+		// Correct width and length factor for air
+		private _widthFactor = 0.5;
+		private _lengthFactor = 0.5;
+		if (_vehicle isKindOf "Air") then {
+			_widthFactor = 0.3;
+		};
+		if (_vehicle isKindOf "Helicopter") then {
+			_widthFactor = 0.2;
+			_lengthFactor = 0.45;
+		};
+		
+		private _centerOfMass = getCenterOfMass _vehicle;
+		private _bbr = boundingBoxReal _vehicle;
+		private _p1 = _bbr select 0;
+		private _p2 = _bbr select 1;
+		private _maxWidth = abs ((_p2 select 0) - (_p1 select 0));
+		private _widthOffset = ((_maxWidth / 2) - abs (_centerOfMass select 0)) * _widthFactor;
+		private _maxLength = abs ((_p2 select 1) - (_p1 select 1));
+		private _lengthOffset = ((_maxLength / 2) - abs (_centerOfMass select 1)) * _lengthFactor;
+		private _maxHeight = abs ((_p2 select 2) - (_p1 select 2));
+		private _heightOffset = _maxHeight/6;
+		
+		private _rearCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2)+_heightOffset];
+		private _rearCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2)+_heightOffset];
+		private _frontCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2)+_heightOffset];
+		private _frontCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2)+_heightOffset];
+		
+		[_rearCorner, _rearCorner2, _frontCorner, _frontCorner2];
+	};
+	
 	ASL_Rope_Set_Mass = {
 		private _obj = [_this, 0] call BIS_fnc_param;
 		private _mass = [_this, 1] call BIS_fnc_param;
@@ -286,17 +319,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		[_selectedRopes, _selectedCargo];
 	};
 	
-	ASL_Show_Select_Ropes_Menu = {
-		params ["_title", "_functionName", "_ropesIndexAndLabelArray", ["_ropesLabel", format[localize "STR_ASL_ROPE"]]];
-		ASL_Show_Select_Ropes_Menu_Array = [[_title, false]];
-		{
-			ASL_Show_Select_Ropes_Menu_Array pushBack [(_x select 1) + " " + _ropesLabel, [0], "", -5, [["expression", "["+(str (_x select 0))+"] call " + _functionName]], "1", "1"];
-		} forEach _ropesIndexAndLabelArray;
-		ASL_Show_Select_Ropes_Menu_Array pushBack [format[localize "STR_ASL_ALL"]  + " " + _ropesLabel, [0], "", -5, [["expression", "{[_x] call " + _functionName + "} forEach [0,1,2];"]], "1", "1"];
-		showCommandingMenu "";
-		showCommandingMenu "#USER:ASL_Show_Select_Ropes_Menu_Array";
-	};
-	
 	ASL_Extend_Ropes_Action_Check = {
 		params ["_vehicle", "_unit"];
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Extend_Ropes_Action_Check) _vehicle: ", _vehicle, "    _unit: ", _unit];
@@ -355,6 +377,17 @@ ASL_Advanced_Sling_Loading_Install = {
 		}; 
 	};
 	
+	ASL_Show_Select_Ropes_Menu = {
+		params ["_title", "_functionName", "_ropesIndexAndLabelArray", ["_ropesLabel", format[localize "STR_ASL_ROPE"]]];
+		ASL_Show_Select_Ropes_Menu_Array = [[_title, false]];
+		{
+			ASL_Show_Select_Ropes_Menu_Array pushBack [(_x select 1) + " " + _ropesLabel, [0], "", -5, [["expression", "["+(str (_x select 0))+"] call " + _functionName]], "1", "1"];
+		} forEach _ropesIndexAndLabelArray;
+		ASL_Show_Select_Ropes_Menu_Array pushBack [format[localize "STR_ASL_ALL"]  + " " + _ropesLabel, [0], "", -5, [["expression", "{[_x] call " + _functionName + "} forEach [0,1,2];"]], "1", "1"];
+		showCommandingMenu "";
+		showCommandingMenu "#USER:ASL_Show_Select_Ropes_Menu_Array";
+	};
+	
 	ASL_Extend_Ropes_Index_Action = {
 		params ["_ropeIndex"];
 		private _vehicle = player getVariable ["ASL_Extend_Index_Vehicle", objNull];
@@ -365,18 +398,16 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Extend_Ropes = {
 		params ["_vehicle", "_player", ["_ropeIndex", 0]];
-		if (local _vehicle) exitWith {
-			private _existingRopes = [_vehicle, _ropeIndex] call ASL_Get_Ropes;
-			if (count _existingRopes > 0) then {
-				private _ropeLength = ropeLength (_existingRopes select 0);
-				if (_ropeLength <= ASL_MaxRopeLength) then {
-					{
-						ropeUnwind [_x, 3, 5, true];
-					} forEach _existingRopes;
-				};
+		if !(local _vehicle) exitWith {[_this, "ASL_Extend_Ropes", _vehicle, true] call ASL_RemoteExec};
+		private _existingRopes = [_vehicle, _ropeIndex] call ASL_Get_Ropes;
+		if (count _existingRopes > 0) then {
+			private _ropeLength = ropeLength (_existingRopes select 0);
+			if (_ropeLength <= ASL_MaxRopeLength) then {
+				{
+					ropeUnwind [_x, 3, 5, true];
+				} forEach _existingRopes;
 			};
 		};
-		[_this, "ASL_Extend_Ropes", _vehicle, true] call ASL_RemoteExec;
 	};
 
 	ASL_Shorten_Ropes_Action_Check = {
@@ -428,23 +459,21 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Shorten_Ropes = {
 		params ["_vehicle", "_player", ["_ropeIndex", 0]];
-		if (local _vehicle) exitWith {
-			private _existingRopes = [_vehicle, _ropeIndex] call ASL_Get_Ropes;
-			if (count _existingRopes > 0) then {
-				private _ropeLength = ropeLength (_existingRopes select 0);
-				if (_ropeLength <= 2) exitWith {
-					_this call ASL_Release_Cargo;
-				}; 
-				{
-					if (_ropeLength >= 10) then {
-						ropeUnwind [_x, 3, -5, true];
-					} else {
-						ropeUnwind [_x, 3, -1, true];
-					};
-				} forEach _existingRopes;
-			};
+		if !(local _vehicle) exitWith {[_this,"ASL_Shorten_Ropes", _vehicle, true] call ASL_RemoteExec};
+		private _existingRopes = [_vehicle, _ropeIndex] call ASL_Get_Ropes;
+		if (count _existingRopes > 0) then {
+			private _ropeLength = ropeLength (_existingRopes select 0);
+			if (_ropeLength <= 2) exitWith {
+				_this call ASL_Release_Cargo;
+			}; 
+			{
+				if (_ropeLength >= 10) then {
+					ropeUnwind [_x, 3, -5, true];
+				} else {
+					ropeUnwind [_x, 3, -1, true];
+				};
+			} forEach _existingRopes;
 		};
-		[_this,"ASL_Shorten_Ropes", _vehicle, true] call ASL_RemoteExec;
 	};
 
 	ASL_Release_Cargo_Action_Check = {
@@ -489,7 +518,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes_With_Cargo;
 		if (count _activeRopes == 1) then {
 			[_vehicle, _unit, (_activeRopes select 0) select 0] call ASL_Release_Cargo;
-			// [_vehicle, (_activeRopes select 0) select 0] call ASL_Release_Cargo;
 		};
 		if (count _activeRopes > 1) then {
 			_unit setVariable ["ASL_Release_Cargo_Index_Vehicle", _vehicle];
@@ -506,21 +534,21 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	ASL_Release_Cargo = {
-		params ["_vehicle", "_player", ["_ropeIndex", 0]];
+		params ["_vehicle", "_unit", ["_ropeIndex", 0]];
 		// params ["_vehicle", ["_ropeIndex", 0]];
-		if (local _vehicle) exitWith {
-			private _existingRopesAndCargo = [_vehicle,_ropeIndex] call ASL_Get_Ropes_And_Cargo;
-			private _existingRopes = _existingRopesAndCargo select 0;
-			private _existingCargo = _existingRopesAndCargo select 1; 
-			{
-				_existingCargo ropeDetach _x;
-			} forEach _existingRopes;
-			private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
-			_allCargo set [_ropeIndex, objNull];
-			_vehicle setVariable ["ASL_Cargo", _allCargo, true];
-			_this call ASL_Retract_Ropes;
-		};
-		[_this, "ASL_Release_Cargo", _vehicle, true] call ASL_RemoteExec;
+		if !(local _vehicle) exitWith {[_this, "ASL_Release_Cargo", _vehicle, true] call ASL_RemoteExec};
+		private _existingRopesAndCargo = [_vehicle,_ropeIndex] call ASL_Get_Ropes_And_Cargo;
+		private _existingRopes = _existingRopesAndCargo select 0;
+		private _existingCargo = _existingRopesAndCargo select 1; 
+		{
+			_existingCargo ropeDetach _x;
+		} forEach _existingRopes;
+		_existingCargo setVariable ["ASL_RopeEndHelper", nil, true];
+		_existingCargo setVariable ["ASL_RopesIndex", nil, true];
+		private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
+		_allCargo set [_ropeIndex, objNull];
+		_vehicle setVariable ["ASL_Cargo", _allCargo, true];
+		_this call ASL_Retract_Ropes;
 	};
 
 	ASL_Retract_Ropes_Action_Check = {
@@ -568,11 +596,9 @@ ASL_Advanced_Sling_Loading_Install = {
 		params [["_vehicle", objNull], "_unit"];
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Retract_Ropes_Action) _vehicle: ", _vehicle, "    _unit: ", _unit];
 		if (isNull _vehicle) exitWith {false};
-		if !([_vehicle, _unit] call ASL_Can_Retract_Ropes) exitWith {false};		
 		private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes_Without_Cargo;
 		if (count _activeRopes == 1) then {
 			[_vehicle, _unit, (_activeRopes select 0) select 0] call ASL_Retract_Ropes;
-			// [_vehicle, (_activeRopes select 0) select 0] call ASL_Retract_Ropes;
 		};
 		if (count _activeRopes > 1) then {
 			_unit setVariable ["ASL_Retract_Ropes_Index_Vehicle", _vehicle];
@@ -581,36 +607,43 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	ASL_Retract_Ropes = {
-		params ["_vehicle", "_player", ["_ropeIndex", 0]];
-		// params ["_vehicle", ["_ropeIndex", 0]];
-		if (local _vehicle) exitWith {
-			private _existingRopesAndCargo = [_vehicle, _ropeIndex] call ASL_Get_Ropes_And_Cargo;
-			private _existingRopes = _existingRopesAndCargo select 0;
-			private _existingCargo = _existingRopesAndCargo select 1; 
-			if (isNull _existingCargo) then {
-				_this call ASL_Drop_Ropes;
-				{
-					[_x] spawn {
-						params ["_rope"];
-						private _count = 0;
-						ropeUnwind [_rope, 3, 0];
-						while {(!ropeUnwound _rope) && _count < 20} do {
-							sleep 1;
-							_count = _count + 1;
-						};
-						ropeDestroy _rope;
-					};
-				} forEach _existingRopes;
-				private _allRopes = _vehicle getVariable ["ASL_Ropes", []];
-				_allRopes set [_ropeIndex, []];
-				_vehicle setVariable ["ASL_Ropes", _allRopes, true];
-			};
-			private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes;
-			if (count _activeRopes == 0) then {
-				_vehicle setVariable ["ASL_Ropes", nil, true];
+		params ["_vehicle", "_unit", ["_ropeIndex", 0]];
+		if !(local _vehicle) exitWith {[_this, "ASL_Retract_Ropes", _vehicle, true] call ASL_RemoteExec};
+		private _existingRopesAndCargo = [_vehicle, _ropeIndex] call ASL_Get_Ropes_And_Cargo;
+		private _existingRopes = _existingRopesAndCargo select 0;
+		private _existingCargo = _existingRopesAndCargo select 1; 
+		private _cargoArray = ropeAttachedObjects _vehicle;
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Retract_Ropes) _vehicle: ", _vehicle, "    _cargoArray: ", _cargoArray];
+		if (count _cargoArray > 0) then {
+			private _helper = (_cargoArray select {_x getVariable ["ASL_Ropes_Pick_Up_Helper", false]}) select 0;
+			if (!isNull _helper) then {
+				private _ropeHolder = attachedTo _helper;
+				if (!isNull _ropeHolder) then {_unit = _ropeHolder};
+				// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Retract_Ropes) _helper: ", _helper, "    _ropeHolder: ", _ropeHolder];
 			};
 		};
-		[_this, "ASL_Retract_Ropes", _vehicle, true] call ASL_RemoteExec;
+		if (isNull _existingCargo) then {
+			[_vehicle, _unit, _ropeIndex] call ASL_Drop_Ropes;
+			{
+				[_x] spawn {
+					params ["_rope"];
+					private _count = 0;
+					ropeUnwind [_rope, 3, 0];
+					while {(!ropeUnwound _rope) && _count < 20} do {
+						sleep 1;
+						_count = _count + 1;
+					};
+					ropeDestroy _rope;
+				};
+			} forEach _existingRopes;
+			private _allRopes = _vehicle getVariable ["ASL_Ropes", []];
+			_allRopes set [_ropeIndex, []];
+			_vehicle setVariable ["ASL_Ropes", _allRopes, true];
+		};
+		private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes;
+		if (count _activeRopes == 0) then {
+			_vehicle setVariable ["ASL_Ropes", nil, true];
+		};
 	};
 	
 	ASL_Retract_Ropes_Index_Action = {
@@ -618,25 +651,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _vehicle = player getVariable ["ASL_Retract_Ropes_Index_Vehicle", objNull];
 		if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Retract_Ropes) then {
 			[_vehicle, player, _ropesIndex] call ASL_Retract_Ropes;
-			// [_vehicle, _ropesIndex] call ASL_Retract_Ropes;
-		};
-	};
-
-	ASL_Deploy_Ropes_Index_Action = {
-		params ["_ropesIndex"];
-		private _vehicle = player getVariable ["ASL_Deploy_Ropes_Index_Vehicle", objNull];
-		// if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Deploy_Ropes) then {
-		if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle, player] call ASL_Can_Deploy_Ropes) then {
-			[_vehicle, player, _ropesIndex] call ASL_Deploy_Ropes_Index;
-		};
-	};
-	
-	ASL_Deploy_Ropes_Count_Action = {
-		params ["_count"];
-		private _vehicle = player getVariable ["ASL_Deploy_Count_Vehicle", objNull];
-		// if (_count > 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Deploy_Ropes) then {
-		if (_count > 0 && !isNull _vehicle && [_vehicle, player] call ASL_Can_Deploy_Ropes) then {
-			[_vehicle, player, _count] call ASL_Deploy_Ropes;
 		};
 	};
 	
@@ -680,7 +694,6 @@ ASL_Advanced_Sling_Loading_Install = {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Deploy_Ropes) EXIT 2"];
 			false
 		};
-		// private _existingVehicle = player getVariable ["ASL_Ropes_Vehicle", []];
 		private _existingVehicle = _unit getVariable ["ASL_Ropes_Vehicle", []];
 		if (count _existingVehicle > 0) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Deploy_Ropes) EXIT 3"];
@@ -706,8 +719,8 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	ASL_Deploy_Ropes_Action = {
-		params [["_vehicle", objNull]];
-		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Deploy_Ropes_Action) _this: ", _this];
+		params [["_vehicle", objNull], "_unit"];
+		diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Deploy_Ropes_Action) _this: ", _this];
 		if (isNull _vehicle) exitWith {false};
 		if (locked _vehicle > 1 && !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false])) exitWith {
 			[format[localize "STR_ASL_CANNOT_DEPLOY"], false] call ASL_Hint;
@@ -716,15 +729,15 @@ ASL_Advanced_Sling_Loading_Install = {
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Deploy_Ropes_Action) _inactiveRopes: ", _inactiveRopes];
 		if (count _inactiveRopes > 0) then {
 			if (count _inactiveRopes > 1) then {
-				player setVariable ["ASL_Deploy_Ropes_Index_Vehicle", _vehicle];	
+				_unit setVariable ["ASL_Deploy_Ropes_Index_Vehicle", _vehicle];	
 				[format[localize "STR_ASL_DEPLOY"], "ASL_Deploy_Ropes_Index_Action", _inactiveRopes] call ASL_Show_Select_Ropes_Menu;
 			} else {
-				[_vehicle, player, (_inactiveRopes select 0) select 0] call ASL_Deploy_Ropes_Index;
+				[_vehicle, _unit, (_inactiveRopes select 0) select 0] call ASL_Deploy_Ropes_Index;
 			};
 		} else {
 			private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
 			if (count _slingLoadPoints > 1) then {
-				player setVariable ["ASL_Deploy_Count_Vehicle", _vehicle];
+				_unit setVariable ["ASL_Deploy_Count_Vehicle", _vehicle];
 				ASL_Deploy_Ropes_Count_Menu = [
 					[format[localize "STR_ASL_ROPES"], false]
 				];
@@ -738,55 +751,41 @@ ASL_Advanced_Sling_Loading_Install = {
 				showCommandingMenu "";
 				showCommandingMenu "#USER:ASL_Deploy_Ropes_Count_Menu";
 			} else {			
-				[_vehicle, player] call ASL_Deploy_Ropes;
+				[_vehicle, _unit] call ASL_Deploy_Ropes;
 			};
 		};
 	};
 	
-	// ASL_Deploy_Ropes = {
-		// params ["_vehicle", "_player", ["_cargoCount", 1]];
-		// if (local _vehicle) exitWith {
-			// private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
-			// private _existingRopes = _vehicle getVariable ["ASL_Ropes",[]];
-			// if (count _existingRopes == 0) then {
-				// if (count _slingLoadPoints == 0) exitWith {
-					// [[format[localize "STR_ASL_DOESNT_SUPPORT"], false], "ASL_Hint", _player] call ASL_RemoteExec;
-				// };
-				// if (count _slingLoadPoints < _cargoCount) exitWith {
-					// [[format[localize "STR_ASL_DOESNT_SUPPORT_X", _cargoCount], false], "ASL_Hint", _player] call ASL_RemoteExec;
-				// };
-				// private _cargoRopes = [];
-				// private _cargo = [];
-				// for "_i" from 0 to (_cargoCount-1) do {
-					// _cargoRopes pushBack [];
-					// _cargo pushBack objNull;
-				// };
-				// _vehicle setVariable ["ASL_Ropes", _cargoRopes, true];
-				// _vehicle setVariable ["ASL_Cargo", _cargo, true];
-				// for "_i" from 0 to (_cargoCount-1) do
-				// {
-					// [_vehicle, _player, _i] call ASL_Deploy_Ropes_Index;
-				// };
-			// } else {
-				// [[format[localize "STR_ASL_ALREADY"], false], "ASL_Hint", _player] call ASL_RemoteExec;
-			// };
-		// };
-		// [_this, "ASL_Deploy_Ropes", _vehicle, true] call ASL_RemoteExec;
-	// };
+	ASL_Deploy_Ropes_Index_Action = {
+		params ["_ropesIndex"];
+		private _vehicle = player getVariable ["ASL_Deploy_Ropes_Index_Vehicle", objNull];
+		// if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle] call ASL_Can_Deploy_Ropes) then {
+		if (_ropesIndex >= 0 && !isNull _vehicle && [_vehicle, player] call ASL_Can_Deploy_Ropes) then {
+			[_vehicle, player, _ropesIndex] call ASL_Deploy_Ropes_Index;
+		};
+	};
+	
+	ASL_Deploy_Ropes_Count_Action = {
+		params ["_count"];
+		private _vehicle = player getVariable ["ASL_Deploy_Count_Vehicle", objNull];
+		if (_count > 0 && !isNull _vehicle && [_vehicle, player] call ASL_Can_Deploy_Ropes) then {
+			[_vehicle, player, _count] call ASL_Deploy_Ropes;
+		};
+	};
 	
 	ASL_Deploy_Ropes = {
 		params ["_vehicle", "_unit", ["_cargoCount", 1]];
 		if !(local _vehicle) exitWith {[_this, "ASL_Deploy_Ropes", _vehicle, true] call ASL_RemoteExec};
 		private _existingRopes = _vehicle getVariable ["ASL_Ropes", []];
-		if (count _existingRopes > 0 && _unit == player) exitWith {
-			[[format[localize "STR_ASL_ALREADY"], false], "ASL_Hint", _unit] call ASL_RemoteExec;
+		if (count _existingRopes > 0) exitWith {
+			if (_unit == player) then {[[format[localize "STR_ASL_ALREADY"], false], "ASL_Hint", _unit] call ASL_RemoteExec};
 		};
 		private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
-		if (count _slingLoadPoints == 0 && _unit == player) exitWith {
-			[[format[localize "STR_ASL_DOESNT_SUPPORT"], false], "ASL_Hint", _unit] call ASL_RemoteExec;
+		if (count _slingLoadPoints == 0) exitWith {
+			if (_unit == player) then {[[format[localize "STR_ASL_DOESNT_SUPPORT"], false], "ASL_Hint", _unit] call ASL_RemoteExec};
 		};
-		if (count _slingLoadPoints < _cargoCount && _unit == player) exitWith {
-			[[format[localize "STR_ASL_DOESNT_SUPPORT_X", _cargoCount], false], "ASL_Hint", _unit] call ASL_RemoteExec;
+		if (count _slingLoadPoints < _cargoCount) exitWith {
+			if (_unit == player) then {[[format[localize "STR_ASL_DOESNT_SUPPORT_X", _cargoCount], false], "ASL_Hint", _unit] call ASL_RemoteExec};
 		};
 		private _cargoRopes = [];
 		private _cargo = [];
@@ -801,29 +800,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 	};
 	
-	// ASL_Deploy_Ropes_Index = {
-		// params ["_vehicle", "_player", ["_ropesIndex", 0], ["_ropeLength", 15]];
-		// if (local _vehicle) exitWith {
-			// private _existingRopes = [_vehicle, _ropesIndex] call ASL_Get_Ropes;
-			// if (count _existingRopes == 0) then {
-				// private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
-				// private _existingRopesCount = [_vehicle] call ASL_Get_Ropes_Count;
-				// private _cargoRopes = [];
-				// _cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-				// _cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-				// _cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-				// _cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-				// {
-					// ropeUnwind [_x, 5, _ropeLength];
-				// } forEach _cargoRopes;
-				// private _allRopes = _vehicle getVariable ["ASL_Ropes", []];
-				// _allRopes set [_ropesIndex, _cargoRopes];
-				// _vehicle setVariable ["ASL_Ropes", _allRopes, true];
-			// };
-		// };
-		// [_this, "ASL_Deploy_Ropes_Index", _vehicle, true] call ASL_RemoteExec;
-	// };
-	
 	ASL_Deploy_Ropes_Index = {
 		params ["_vehicle", "_unit", ["_ropesIndex", 0], ["_ropeLength", 15]];
 		if !(local _vehicle) exitWith {[_this, "ASL_Deploy_Ropes_Index", _vehicle, true] call ASL_RemoteExec};
@@ -832,188 +808,138 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _existingRopesCount = [_vehicle] call ASL_Get_Ropes_Count;
 		private _slingLoadPoints = [_vehicle] call ASL_Get_Sling_Load_Points;
 		private _cargoRopes = [];
-		_cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-		_cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-		_cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-		_cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
-		private ["_helper"];
-		private _helperArray = [];
+		for "_i" from 1 to 4 do {
+			_cargoRopes pushBack ropeCreate [_vehicle, (_slingLoadPoints select (_existingRopesCount - 1)) select _ropesIndex, 0]; 
+		};
 		{
-			// _helper = createVehicle ["ASL_RopeSmallWeight", (ropeEndPosition _x) select 1, [], 0, "CAN_COLLIDE"];
-			// _helper setMass 0.1;
-			// _helper allowDamage false;		
-			// [_helper, [0, 0, 0], [0, 0, 0]] ropeAttachTo _x;
-			// _helper setVariable ["ASL_RopeEndHelper", true, true];
-			// _helper setVariable ["ASL_RopesIndex", _ropesIndex, true];
-			
-			
-			// Once helper is attached to a rope end, it begins searchching for unit in pickup range.
-			// Only if a unit is then found, the unit will get the 'pickup ropes' action. 
-			// [_helper] spawn ASL_Add_Pickup_Action;
-			_helper = [_x, _ropesIndex] call ASL_Create_Rope_End_Helper;
-			_helperArray pushBack _helper;
+			_x setVariable ["ASL_Ropes_Vehicle", [_vehicle, _ropesIndex], true];   	// memory vehicle and rope index on each rope 
 			ropeUnwind [_x, 5, _ropeLength];
 		} forEach _cargoRopes;
-		{
-			_x setVariable ["ASL_RopesHelperArray", _helperArray, true];
-		} forEach _helperArray;
 		private _allRopes = _vehicle getVariable ["ASL_Ropes", []];
 		_allRopes set [_ropesIndex, _cargoRopes];
 		_vehicle setVariable ["ASL_Ropes", _allRopes, true];
+		[_vehicle] spawn ASL_Rope_Monitor_Vehicle;
 	};
 	
-	ASL_Create_Rope_End_Helper = {
-		params ["_rope", "_ropesIndex"];
-		private _helper = createVehicle ["ASL_RopeSmallWeight", (ropeEndPosition _rope) select 1, [], 0, "CAN_COLLIDE"];
-		_helper setMass 0.1;
-		_helper allowDamage false;		
-		[_helper, [0, 0, 0], [0, 0, 0]] ropeAttachTo _rope;
-		_helper setVariable ["ASL_RopeEndHelper", true, true];
-		_helper setVariable ["ASL_RopesIndex", _ropesIndex, true];
-		[_helper] spawn ASL_Add_Pickup_Action;
-	};	
-	
-	ASL_Add_Pickup_Action = {
-		params [["_object", objNull]];
-		if (isNull _object) exitWith {};
-		while {alive _object} do {
-			private _nearbyUnits = (_object nearObjects (ASL_RopePickupDistance)) select {_x isKindOf "CAManBase" && side _x == side player && vehicle _x == _x};
-			// hintSilent formatText ["%1%2%3%4%5", time, "s  (ASL_Add_Pickup_Action) _nearbyUnits: ", _nearbyUnits];
+	ASL_Rope_Monitor_Vehicle = {
+		params [["_vehicle", objNull]];
+		if (isNull _vehicle) exitWith {};
+		if (_vehicle getVariable ["ASL_Vehicle_Rope_Monitor", false]) exitWith {};  // leave, if vehicle is already monitoring rope ends
+		_vehicle setVariable ["ASL_Vehicle_Rope_Monitor", true, true];
+		// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Rope_Monitor_Vehicle) _vehicle: ", _vehicle, ", started rope end monitoring"];
+		private ["_allRopes", "_ropeBundle", "_rope", "_nearbyUnits", "_unitRopes"];
+		while {alive _vehicle && !(isNil{_vehicle getVariable "ASL_Ropes"})} do {
+			_allRopes = _vehicle getVariable ["ASL_Ropes", []];
+			// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Rope_Monitor_Vehicle) _allRopes: ", _allRopes];
 			{
-				if (isNil{_x getVariable "ASL_ActionID_Pickup"}) then {
-					private _actionID = _x addAction [
-						format[localize "STR_ASL_PICKUP"],						// Title
-						{[_this select 0] call ASL_Pickup_Ropes_Action;},		// Script
-						nil,													// Arguments
-						0,														// Priority
-						false,													// showWindow
-						true,													// hideOnUse
-						"",														// Shortcut
-						"[_this] call ASL_Pickup_Ropes_Action_Check"			// Condition
-					];
-					_x setVariable ["ASL_ActionID_Pickup", _actionID];
-				};
-			} forEach _nearbyUnits;
-			sleep 0.5;
+				_ropeBundle = _x;
+				{
+					_rope = _x;
+					_nearbyUnits = ((ropeEndPosition _rope select 1) nearObjects (ASL_RopeHandlingDistance + 10)) select {_x isKindOf "CAManBase" && side _x == side player && vehicle _x == _x};
+					// hintSilent formatText ["%1%2%3%4%5", time, "s  (ASL_Rope_Monitor_Vehicle) _nearbyUnits: ", _nearbyUnits];
+					{
+						_unitRopes = _x getVariable ["ASL_Ropes_Near_Unit", []];
+						if (_unitRopes find _rope == -1) then {
+							_unitRopes pushBack _rope;
+							_x setVariable ["ASL_Ropes_Near_Unit", _unitRopes];
+						};
+						// hintSilent formatText ["%1%2%3%4%5", time, "s  (ASL_Rope_Monitor_Vehicle) unit: ", _x, ", _unitRopes: ", _unitRopes];
+						[_x] spawn ASL_Rope_Monitor_Unit;
+					} forEach _nearbyUnits;
+				} forEach _ropeBundle;
+			} forEach _allRopes;
+			sleep 1;
 		};
+		_vehicle setVariable ["ASL_Vehicle_Rope_Monitor", nil, true];
 	};
 
-	ASL_Get_Corner_Points = {
-		params ["_vehicle"];
-		
-		// Correct width and length factor for air
-		private _widthFactor = 0.5;
-		private _lengthFactor = 0.5;
-		if (_vehicle isKindOf "Air") then {
-			_widthFactor = 0.3;
+	ASL_Rope_Monitor_Unit = {
+		params [["_unit", objNull]];
+		if (isNull _unit) exitWith {};
+		if (_unit getVariable ["ASL_Unit_Rope_Monitor", false]) exitWith {};  		// leave, if unit is already monitoring ror rope ends
+		_unit setVariable ["ASL_Unit_Rope_Monitor", true];							// raise unit rope monitor flag
+		// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Rope_Monitor_Unit) _unit: ", _unit, ", started rope end monitoring"];
+		if (isNil{_unit getVariable "ASL_ActionID_Pickup"}) then {					// add pickup action to unit
+			private _actionID = _unit addAction [
+				format[localize "STR_ASL_PICKUP"],									// Title
+				{[_this select 0] call ASL_Pickup_Ropes_Action;},					// Script
+				nil,																// Arguments
+				0,																	// Priority
+				false,																// showWindow
+				true,																// hideOnUse
+				"",																	// Shortcut
+				"[_this] call ASL_Pickup_Ropes_Action_Check"						// Condition
+			];
+			_unit setVariable ["ASL_ActionID_Pickup", _actionID];
 		};
-		if (_vehicle isKindOf "Helicopter") then {
-			_widthFactor = 0.2;
-			_lengthFactor = 0.45;
+		private ["_unitRopes", "_index"];
+		while {alive _unit && (count(_unit getVariable ["ASL_Ropes_Near_Unit", []]) > 0)} do {
+			_unitRopes = _unit getVariable "ASL_Ropes_Near_Unit";
+			// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Rope_Monitor_Unit) _unitRopes: ", _unitRopes];
+			// hintSilent formatText ["%1%2%3%4%5%6%7", "unit: ", _unit, lineBreak, "Ropes: ", lineBreak, _unitRopes];
+			if (objNull in _unitRopes) then {
+				_unitRopes = _unitRopes - [objNull];
+				_unit setVariable ["ASL_Ropes_Near_Unit", _unitRopes];
+			};
+			{
+				if (!alive _x || (_unit distance (ropeEndPosition _x select 1) > (ASL_RopeHandlingDistance + 15) && _unitRopes find _x != -1)) then {
+					_index = _unitRopes find _x;
+					if (_index == -1) exitWith {};
+					_unitRopes deleteAt _index;
+					_unit setVariable ["ASL_Ropes_Near_Unit", _unitRopes];
+				};
+			} forEach _unitRopes;
+			sleep 0.1;
 		};
-		
-		private _centerOfMass = getCenterOfMass _vehicle;
-		private _bbr = boundingBoxReal _vehicle;
-		private _p1 = _bbr select 0;
-		private _p2 = _bbr select 1;
-		private _maxWidth = abs ((_p2 select 0) - (_p1 select 0));
-		private _widthOffset = ((_maxWidth / 2) - abs (_centerOfMass select 0)) * _widthFactor;
-		private _maxLength = abs ((_p2 select 1) - (_p1 select 1));
-		private _lengthOffset = ((_maxLength / 2) - abs (_centerOfMass select 1)) * _lengthFactor;
-		private _maxHeight = abs ((_p2 select 2) - (_p1 select 2));
-		private _heightOffset = _maxHeight/6;
-		
-		private _rearCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2)+_heightOffset];
-		private _rearCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2)+_heightOffset];
-		private _frontCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2)+_heightOffset];
-		private _frontCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2)+_heightOffset];
-		
-		[_rearCorner, _rearCorner2, _frontCorner, _frontCorner2];
+		[_unit, ["ASL_ActionID_Pickup"]] call ASL_Remove_Actions;				// if no rope ends near, remove pickup action from unit
+		_unit setVariable ["ASL_Ropes_Near_Unit", nil];								// annil unit rope array
+		_unit setVariable ["ASL_Unit_Rope_Monitor", nil];							// annil unit rope monitor flag
 	};
-	
-	// ASL_Pickup_Ropes_Action_Check = {
-		// [] call ASL_Can_Pickup_Ropes;
-	// };
-	
-	// ASL_Can_Pickup_Ropes = {
-		// count (player getVariable ["ASL_Ropes_Vehicle", []]) == 0 && count (missionNamespace getVariable ["ASL_Nearby_Vehicles",[]]) > 0 && vehicle player == player;
-	// };
 	
 	ASL_Pickup_Ropes_Action_Check = {
 		params [["_unit", objNull]];
+		if (isNull _unit) exitWith {false};
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Pickup_Ropes_Action_Check) _target: ", _target, ", _this: ", _this];
 		// hintSilent formatText ["%1%2%3%4%5%6", time, "s  (ASL_Pickup_Ropes_Action_Check)  _unit: ", _unit, lineBreak, "rope ends found: ", count ((_unit nearObjects 5) select {_x getVariable ["ASL_RopeEndHelper", false]})];
-		if (count ((_unit nearObjects ASL_RopePickupDistance) select {_x getVariable ["ASL_RopeEndHelper", false]}) > 0 && vehicle _unit == _unit) exitWith {true};
-		[_unit, ["ASL_ActionID_Pickup"]] call ASL_Remove_Unit_Actions;			// if no rope helper objects near, remove pickup action from unit
-		false
+		if (vehicle _unit != _unit) exitWith {false};
+		if !(isNil{_unit getVariable "ASL_Ropes_Pick_Up_Helper"}) exitWith {false};
+		private _unitRopes = _unit getVariable "ASL_Ropes_Near_Unit";
+		if (objNull in _unitRopes) then {
+			_unitRopes = _unitRopes - [objNull];
+			_unit setVariable ["ASL_Ropes_Near_Unit", _unitRopes];
+		};	
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Pickup_Ropes_Action_Check) _unitRopes: ", _unitRopes];
+		private _pickup = false;
+		{
+			if (alive _x && (_unit distance (ropeEndPosition _x select 1) < ASL_RopeHandlingDistance)) exitWith {_pickup = true};
+		} forEach _unitRopes;
+		_pickup
 	};
-	
-	// ASL_Pickup_Ropes_Action = {
-		// // private _nearbyVehicles = missionNamespace getVariable ["ASL_Nearby_Vehicles", []];
-		// if ([] call ASL_Can_Pickup_Ropes) then {
-			// private _closestRope = [] call ASL_Get_Closest_Rope;
-			// if (!isNull (_closestRope select 0)) then {
-				// private _canPickupRopes = true;
-				// if !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false]) then {
-					// if (locked (_closestRope select 0) > 1) then {
-						// [format[localize "STR_ASL_CANT_PICKUP"], false] call ASL_Hint;
-						// _canPickupRopes = false;
-					// };
-				// };
-				// if (_canPickupRopes) then {
-					// [(_closestRope select 0), player, (_closestRope select 1)] call ASL_Pickup_Ropes;
-				// };	
-			// };
-		// };
-	// };
-	
+
 	ASL_Pickup_Ropes_Action = {
 		params [["_unit", objNull]];
-		private _ropeEnds = (nearestObjects [_unit, [], ASL_RopePickupDistance]) select {_x getVariable ["ASL_RopeEndHelper", false]};
-		// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Pickup_Ropes_Action)  _unit: ", _unit, lineBreak, "rope ends 1: ", count _ropeEnds1, lineBreak, "rope ends: ", count _ropeEnds];
-		private _closestRopeEnd = _ropeEnds select 0;
-		if (isNull _closestRopeEnd) exitWith {};
-		private _helperArray = _closestRopeEnd getVariable ["ASL_RopesHelperArray", []];
-		private _ropesIndex = _closestRopeEnd getVariable "ASL_RopesIndex";
-		private _vehicle = ropeAttachedTo _closestRopeEnd;
-		diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Pickup_Ropes_Action)  _helperArray: ", _helperArray, "_vehicle: ", _vehicle, "_ropesIndex: ", _ropesIndex];
+		if (isNull _unit) exitWith {};
+		private _unitRopes = _unit getVariable "ASL_Ropes_Near_Unit";
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Pickup_Ropes_Action) unit: ", _unit, ", _unitRopes: ", _unitRopes];
+		// hintSilent formatText ["%1%2%3%4%5", time, "s  (ASL_Pickup_Ropes_Action) unit: ", _unit, ", _unitRopes: ", _unitRopes];
+		private _closestRope = objNull;
+		private _closestDistance = ASL_RopeHandlingDistance + 100;
+		{
+			_distance = _unit distance (ropeEndPosition _x select 1);
+			if (_x != objNull && _distance < ASL_RopeHandlingDistance && _distance < _closestDistance) then {
+				_closestRope = _x;
+			};
+		} forEach _unitRopes;
+		if (isNull _closestRope) exitWith {};
+		private _vehicle = (_closestRope getVariable "ASL_Ropes_Vehicle") select 0;
 		if (isNull _vehicle) exitWith {};
 		if (locked _vehicle > 1 && !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false])) exitWith {
 			[format[localize "STR_ASL_CANT_PICKUP"], false] call ASL_Hint;
 		};
-		{
-			deleteVehicle _x;
-		} forEach _helperArray;   // once we got all relevant info, we no longer need the helpers
+		private _ropesIndex = (_closestRope getVariable "ASL_Ropes_Vehicle") select 1;
 		[_vehicle, _unit, _ropesIndex] call ASL_Pickup_Ropes;
 	};
 
-	// ASL_Pickup_Ropes = {
-		// params ["_vehicle", "_player", ["_ropesIndex", 0]];
-		// if (local _vehicle) exitWith {
-			// private _existingRopesAndCargo = [_vehicle,_ropesIndex] call ASL_Get_Ropes_And_Cargo;
-			// private _existingRopes = _existingRopesAndCargo select 0;
-			// private _existingCargo = _existingRopesAndCargo select 1;
-			// if (!isNull _existingCargo) then {
-				// {
-					// _existingCargo ropeDetach _x;
-				// } forEach _existingRopes;
-				// private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
-				// _allCargo set [_ropesIndex, objNull];
-				// _vehicle setVariable ["ASL_Cargo", _allCargo, true];
-			// };
-			// private _helper = "Land_Can_V2_F" createVehicle position _player;
-			// {
-				// [_helper, [0, 0, 0], [0, 0, -1]] ropeAttachTo _x;
-				// _helper attachTo [_player, [-0.1, 0.1, 0.15], "Pelvis"];
-			// } forEach _existingRopes;
-			// hideObject _helper;
-			// [[_helper], "ASL_Hide_Object_Global"] call ASL_RemoteExecServer;
-			// _player setVariable ["ASL_Ropes_Vehicle", [_vehicle, _ropesIndex], true];
-			// _player setVariable ["ASL_Ropes_Pick_Up_Helper", _helper, true];
-		// }; 
-		// [_this, "ASL_Pickup_Ropes", _vehicle, true] call ASL_RemoteExec;
-	// };
-	
 	ASL_Pickup_Ropes = {
 		params ["_vehicle", "_unit", ["_ropesIndex", 0]];
 		if !(local _vehicle) exitWith {[_this, "ASL_Pickup_Ropes", _vehicle, true] call ASL_RemoteExec};
@@ -1029,16 +955,14 @@ ASL_Advanced_Sling_Loading_Install = {
 			_vehicle setVariable ["ASL_Cargo", _allCargo, true];
 		};
 		private _helper = "Land_Can_V2_F" createVehicle position _unit;
+		_helper setVariable ["ASL_Ropes_Pick_Up_Helper", true, true];
 		{
 			[_helper, [0, 0, 0], [0, 0, -1]] ropeAttachTo _x;
 			_helper attachTo [_unit, [-0.1, 0.1, 0.15], "Pelvis"];
 		} forEach _existingRopes;
 		hideObjectGlobal _helper;
-		// [[_helper], "ASL_Hide_Object_Global"] call ASL_RemoteExecServer;
 		_unit setVariable ["ASL_Ropes_Vehicle", [_vehicle, _ropesIndex], true];
 		_unit setVariable ["ASL_Ropes_Pick_Up_Helper", _helper, true];
-
-		[_unit, ["ASL_ActionID_Pickup"]] call ASL_Remove_Unit_Actions;		// remove pickup action, once unit has picked up some ropes
 		
 		private ["_actionID"];
 		if (isNil{_unit getVariable "ASL_ActionID_Attach"}) then {		
@@ -1070,82 +994,13 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 	};
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-			
-		
-		
-		
-		
-		
-	
-	
-	// ASL_Attach_Ropes_Action_Check = {
-		// private _vehicleWithIndex = player getVariable ["ASL_Ropes_Vehicle", [objNull, 0]];
-		// private _cargo = cursorTarget;
-		// [_vehicleWithIndex select 0, _cargo] call ASL_Can_Attach_Ropes;
-	// };
-	
 	ASL_Attach_Ropes_Action_Check = {
 		params [["_unit", objNull]];
 		if (isNull _unit) exitWith {false};
-		private _vehicle = (_unit getVariable ["ASL_Ropes_Vehicle", [objNull, 0]]) select 0;
 		private _cargo = cursorTarget;
-		[_vehicle, _cargo] call ASL_Is_Supported_Cargo && vehicle _unit == _unit && _unit distance _cargo < 10 && _vehicle != _cargo;
+		private _vehicle = (_unit getVariable ["ASL_Ropes_Vehicle", [objNull, 0]]) select 0;
+		[_vehicle, _cargo] call ASL_Is_Supported_Cargo && vehicle _unit == _unit && _unit distance _cargo < ASL_RopeHandlingDistance && _vehicle != _cargo;
 	};
-	
-	// ASL_Can_Attach_Ropes = {
-		// params ["_vehicle", "_cargo", ["_unit", player]];
-		// if (isNull _vehicle || isNull _cargo) exitWith {false};
-		// [_vehicle, _cargo] call ASL_Is_Supported_Cargo && vehicle _unit == _unit && _unit distance _cargo < 10 && _vehicle != _cargo;
-	// };
-	
-	// ASL_Can_Attach_Ropes = {
-		// params ["_vehicle", "_cargo"];
-		// if (!isNull _vehicle && !isNull _cargo) then {
-			// [_vehicle, _cargo] call ASL_Is_Supported_Cargo && vehicle player == player && player distance _cargo < 10 && _vehicle != _cargo;
-		// } else {
-			// false;
-		// };
-	// };
-	
-	// ASL_Attach_Ropes_Action = {
-		// private _cargo = cursorTarget;
-		// private _vehicle = (player getVariable ["ASL_Ropes_Vehicle", [objNull, 0]]) select 0;
-		// if ([_vehicle, _cargo] call ASL_Can_Attach_Ropes) then {
-			// // private _canBeAttached = true;
-			// // if !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false]) then {
-				// // if (locked _cargo > 1) then {
-					// // [format[localize "STR_ASL_CANT_ATTACH"], false] call ASL_Hint;
-					// // _canBeAttached = false;
-				// // };
-			// // };
-			// if (locked _cargo > 1 && !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false])) exitWith {
-				// [format[localize "STR_ASL_CANT_ATTACH"], false] call ASL_Hint;
-			// };
-			
-			// private _canBeAttached = true;
-			// if !(missionNamespace getVariable ["ASL_EXILE_SAFEZONE_ENABLED", false]) then {
-				// if (!isNil "ExilePlayerInSafezone") then {
-					// if (ExilePlayerInSafezone) then {
-						// [format[localize "STR_ASL_CANT_SAFE"], false] call ASL_Hint;
-						// _canBeAttached = false;
-					// };
-				// };
-			// };
-			
-			// if (_canBeAttached) then {
-				// [_cargo, player] call ASL_Attach_Ropes;
-			// };
-		// };
-	// };
 	
 	ASL_Attach_Ropes_Action = {
 		params [["_unit", objNull]];
@@ -1169,39 +1024,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 	};
 	
-	// ASL_Attach_Ropes = {
-		// params ["_cargo", "_player"];
-		// private _vehicleWithIndex = _player getVariable ["ASL_Ropes_Vehicle", [objNull, 0]];
-		// private _vehicle = _vehicleWithIndex select 0;
-		// if (!isNull _vehicle) then {
-			// if (local _vehicle) then {
-				// private _ropes = [_vehicle,(_vehicleWithIndex select 1)] call ASL_Get_Ropes;
-				// if (count _ropes == 4) then {
-					// private _attachmentPoints = [_cargo] call ASL_Get_Corner_Points;
-					// private _ropeLength = (ropeLength (_ropes select 0));
-					// private _objDistance = (_cargo distance _vehicle) + 2;
-					// if (_objDistance > _ropeLength) then {
-						// [[format[localize "STR_ASL_TOO_SHORT"], false], "ASL_Hint", _player] call ASL_RemoteExec;
-					// } else {		
-						// [_vehicle, _player] call ASL_Drop_Ropes;
-						// [_cargo, _attachmentPoints select 0, [0, 0, -1]] ropeAttachTo (_ropes select 0);
-						// [_cargo, _attachmentPoints select 1, [0, 0, -1]] ropeAttachTo (_ropes select 1);
-						// [_cargo, _attachmentPoints select 2, [0, 0, -1]] ropeAttachTo (_ropes select 2);
-						// [_cargo, _attachmentPoints select 3, [0, 0, -1]] ropeAttachTo (_ropes select 3);
-						// private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
-						// _allCargo set [(_vehicleWithIndex select 1),_cargo];
-						// _vehicle setVariable ["ASL_Cargo",_allCargo, true];
-						// if (missionNamespace getVariable ["ASL_HEAVY_LIFTING_ENABLED",true]) then {
-							// [_cargo, _vehicle, _ropes] spawn ASL_Rope_Adjust_Mass;		
-						// };				
-					// };
-				// };
-			// } else {
-				// [_this, "ASL_Attach_Ropes", _vehicle, true] call ASL_RemoteExec;
-			// };
-		// };
-	// };
-	
 	ASL_Attach_Ropes = {
 		params ["_cargo", ["_unit", objNull]];
 		private _vehicleWithIndex = _unit getVariable ["ASL_Ropes_Vehicle", [objNull, 0]];
@@ -1216,64 +1038,23 @@ ASL_Advanced_Sling_Loading_Install = {
 		if (_objDistance > _ropeLength) then {
 			[[format[localize "STR_ASL_TOO_SHORT"], false], "ASL_Hint", _unit] call ASL_RemoteExec;
 		} else {		
-			_cargo setVariable ["ASL_RopeEndHelper", true, true];
 			private _ropesIndex = _vehicleWithIndex select 1;
-			_cargo setVariable ["ASL_RopesIndex", _ropesIndex, true];		
-
-			
+			_cargo setVariable ["ASL_RopesIndex", _ropesIndex, true];
 			[_vehicle, _unit] call ASL_Drop_Ropes;
-			[_cargo, _attachmentPoints select 0, [0, 0, -1]] ropeAttachTo (_ropes select 0);
-			[_cargo, _attachmentPoints select 1, [0, 0, -1]] ropeAttachTo (_ropes select 1);
-			[_cargo, _attachmentPoints select 2, [0, 0, -1]] ropeAttachTo (_ropes select 2);
-			[_cargo, _attachmentPoints select 3, [0, 0, -1]] ropeAttachTo (_ropes select 3);
+			for "_i" from 0 to 3 do {
+				[_cargo, _attachmentPoints select _i, [0, 0, -1]] ropeAttachTo (_ropes select _i);
+			};
 			private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
 			_allCargo set [(_vehicleWithIndex select 1), _cargo];
 			_vehicle setVariable ["ASL_Cargo", _allCargo, true];
 			if (missionNamespace getVariable ["ASL_HEAVY_LIFTING_ENABLED", true]) then {
 				[_cargo, _vehicle, _ropes] spawn ASL_Rope_Adjust_Mass;		
 			};
-			[_unit, ["ASL_ActionID_Attach", "ASL_ActionID_Drop"]] call ASL_Remove_Unit_Actions;		// remove 'drop ropes' and 'attach ropes' actions, once unit has attached ropes to some cargo
-			[_cargo] spawn ASL_Add_Pickup_Action;
+			[_unit, ["ASL_ActionID_Attach", "ASL_ActionID_Drop"]] call ASL_Remove_Actions;		// remove 'drop ropes' and 'attach ropes' actions, once unit has attached ropes to some cargo
+			_unit setVariable ["ASL_Ropes_Vehicle", nil, true];
+			_unit setVariable ["ASL_Ropes_Pick_Up_Helper", nil, true];
 		};
 	};
-	// ASL_Pickup_Ropes_Action = {
-		// params [["_unit", objNull]];
-		// private _ropeEnds = (nearestObjects [_unit, [], ASL_RopePickupDistance]) select {_x getVariable ["ASL_RopeEndHelper", false]};
-		// // diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Pickup_Ropes_Action)  _unit: ", _unit, lineBreak, "rope ends 1: ", count _ropeEnds1, lineBreak, "rope ends: ", count _ropeEnds];
-		// private _closestRopeEnd = _ropeEnds select 0;
-		// if (isNull _closestRopeEnd) exitWith {};
-		// private _helperArray = _closestRopeEnd getVariable ["ASL_RopesHelperArray", []];
-		// private _ropesIndex = _closestRopeEnd getVariable "ASL_RopesIndex";
-		// private _vehicle = ropeAttachedTo _closestRopeEnd;
-		// diag_log formatText ["%1%2%3%4%5%6%7%8%9%10", time, "s  (ASL_Pickup_Ropes_Action)  _helperArray: ", _helperArray, lineBreak, "_vehicle: ", _vehicle];
-		// if (isNull _vehicle) exitWith {};
-		// if (locked _vehicle > 1 && !(missionNamespace getVariable ["ASL_LOCKED_VEHICLES_ENABLED", false])) exitWith {
-			// [format[localize "STR_ASL_CANT_PICKUP"], false] call ASL_Hint;
-		// };
-		// {
-			// deleteVehicle _x;
-		// } forEach _helperArray;   // once we got all relevant info, we no longer need the helpers
-		// [_vehicle, _unit, _ropesIndex] call ASL_Pickup_Ropes;
-	// };
-	
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	// ASL_Drop_Ropes_Action_Check = {
-		// [] call ASL_Can_Drop_Ropes;
-	// };
-	
-	// ASL_Can_Drop_Ropes = {
-		// count (player getVariable ["ASL_Ropes_Vehicle", []]) > 0 && vehicle player == player;
-	// };
 	
 	ASL_Drop_Ropes_Action_Check = {
 		params [["_unit", objNull]];
@@ -1281,93 +1062,32 @@ ASL_Advanced_Sling_Loading_Install = {
 		count (_unit getVariable ["ASL_Ropes_Vehicle", []]) > 0 && vehicle _unit == _unit;
 	};
 	
-	// ASL_Drop_Ropes_Action = {
-		// if ([] call ASL_Can_Drop_Ropes) then {	
-			// private _vehicleAndIndex = player getVariable ["ASL_Ropes_Vehicle", []];
-			// if (count _vehicleAndIndex == 2) then {
-				// [_vehicleAndIndex select 0, player, _vehicleAndIndex select 1] call ASL_Drop_Ropes;
-			// };
-		// };
-	// };
-	
 	ASL_Drop_Ropes_Action = {
 		params [["_unit", objNull]];
 		if (isNull _unit) exitWith {false};
 		private _vehicleAndIndex = _unit getVariable ["ASL_Ropes_Vehicle", []];
 		if (count _vehicleAndIndex == 2) then {
-			[_vehicleAndIndex select 0, _unit, _vehicleAndIndex select 1, true] call ASL_Drop_Ropes;
+			[_vehicleAndIndex select 0, _unit, _vehicleAndIndex select 1] call ASL_Drop_Ropes;
 		};
 	};
 	
-	// ASL_Drop_Ropes = {
-		// params ["_vehicle", "_player", ["_ropesIndex", 0]];
-		// if !(local _vehicle) exitWith {[_this, "ASL_Drop_Ropes", _vehicle, true] call ASL_RemoteExec};
-		// private _helper = (_player getVariable ["ASL_Ropes_Pick_Up_Helper", objNull]);
-		// if (!isNull _helper) then {
-			// private _existingRopes = [_vehicle, _ropesIndex] call ASL_Get_Ropes;		
-			// {
-				// _helper ropeDetach _x;
-			// } forEach _existingRopes;
-			// detach _helper;
-			// deleteVehicle _helper;		
-		// };
-		// _player setVariable ["ASL_Ropes_Vehicle", nil, true];
-		// _player setVariable ["ASL_Ropes_Pick_Up_Helper", nil, true];
-	// };
-			
 	ASL_Drop_Ropes = {
-		params ["_vehicle", "_unit", ["_ropesIndex", 0], ["_createHelper", false]];
+		params ["_vehicle", "_unit", ["_ropesIndex", 0]];
 		if !(local _vehicle) exitWith {[_this, "ASL_Drop_Ropes", _vehicle, true] call ASL_RemoteExec};
 		private _helper = (_unit getVariable ["ASL_Ropes_Pick_Up_Helper", objNull]);
 		if (!isNull _helper) then {
 			private _existingRopes = [_vehicle, _ropesIndex] call ASL_Get_Ropes;		
-			private _helperArray = [];
 			{
 				_helper ropeDetach _x;
-				if (_createHelper) then {
-					_endHelper = [_x, _ropesIndex] call ASL_Create_Rope_End_Helper;
-					_helperArray pushBack _endHelper;
-				};
 			} forEach _existingRopes;
 			detach _helper;
-			deleteVehicle _helper;		
+			deleteVehicle _helper;
 		};
-		{
-			_x setVariable ["ASL_RopesHelperArray", _helperArray, true];
-		} forEach _helperArray;
+		[_unit, ["ASL_ActionID_Attach", "ASL_ActionID_Drop"]] call ASL_Remove_Actions;		// remove 'drop ropes' and 'attach ropes' actions, once unit has attached ropes to some cargo
 		_unit setVariable ["ASL_Ropes_Vehicle", nil, true];
 		_unit setVariable ["ASL_Ropes_Pick_Up_Helper", nil, true];
 	};
-	
-	ASL_Get_Closest_Rope = {
-		private _nearbyVehicles = missionNamespace getVariable ["ASL_Nearby_Vehicles", []];
-		private _closestVehicle = objNull;
-		private _closestRopeIndex = 0;
-		private _closestDistance = -1;
-		private ["_vehicle", "_activeRope", "_ropes", "_ends", "_end1", "_end2", "_minEndDistance"];
-		{
-			_vehicle = _x;
-			{
-				_activeRope = _x;
-				_ropes = [_vehicle, (_activeRope select 0)] call ASL_Get_Ropes;
-				{
-					_ends = ropeEndPosition _x;
-					if (count _ends == 2) then {
-						_end1 = _ends select 0;
-						_end2 = _ends select 1;
-						_minEndDistance = ((position player) distance _end1) min ((position player) distance _end2);
-						if (_closestDistance == -1 || _closestDistance > _minEndDistance) then {
-							_closestDistance = _minEndDistance;
-							_closestRopeIndex = (_activeRope select 0);
-							_closestVehicle = _vehicle;
-						};
-					};
-				} forEach _ropes;
-			} forEach ([_vehicle] call ASL_Get_Active_Ropes);
-		} forEach _nearbyVehicles;
-		[_closestVehicle, _closestRopeIndex];
-	};
-	
+
 	ASL_SUPPORTED_VEHICLES = [
 		"Helicopter",
 		"VTOL_Base_F"
@@ -1398,25 +1118,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		_canSling
 	};
 	
-	// ASL_Is_Supported_Cargo = {
-		// params ["_vehicle", "_cargo"];
-		// private _canSling = false;
-		// if (not isNull _vehicle && not isNull _cargo) then {
-			// {
-				// if (_vehicle isKindOf (_x select 0)) then {
-					// if (_cargo isKindOf (_x select 2)) then {
-						// if ((toUpper (_x select 1)) == "CAN_SLING") then {
-							// _canSling = true;
-						// } else {
-							// _canSling = false;
-						// };
-					// };
-				// };
-			// } forEach (missionNamespace getVariable ["ASL_SLING_RULES_OVERRIDE", ASL_SLING_RULES]);
-		// };
-		// _canSling;
-	// };
-	
 	ASL_Hint = {
 		params ["_msg", ["_isSuccess", true]];
 		if (!isNil "ExileClient_gui_notification_event_addNotification") then {
@@ -1429,87 +1130,38 @@ ASL_Advanced_Sling_Loading_Install = {
 			hint _msg;
 		};
 	};
-	
-	ASL_Hide_Object_Global = {
-		params ["_obj"];
-		if (_obj isKindOf "Land_Can_V2_F") then {
-			hideObjectGlobal _obj;
-		};
+
+	ASL_Switch_Vehicles_Actions = {
+		{
+			[_x] call ASL_Add_Vehicle_Actions;
+		} foreach vehicles;
 	};
-	
-	// ASL_Find_Nearby_Vehicles = {
-		// private _nearVehicles = [];
-		// {
-			// _nearVehicles append  (player nearObjects [_x, 30]);
-		// } forEach (missionNamespace getVariable ["ASL_SUPPORTED_VEHICLES_OVERRIDE", ASL_SUPPORTED_VEHICLES]);
-		// private _nearVehiclesWithRopes = [];
-		// private ["_vehicle", "_ropes", "_ends", "_end1", "_end2", "_playerPosAGL"];
-		// {
-			// _vehicle = _x;
-			// {
-				// _ropes = _vehicle getVariable ["ASL_Ropes",[]];
-				// if (count _ropes > (_x select 0)) then {
-					// _ropes = _ropes select (_x select 0);
-					// {
-						// _ends = ropeEndPosition _x;
-						// if (count _ends == 2) then {
-							// _end1 = _ends select 0;
-							// _end2 = _ends select 1;
-							// _playerPosAGL = ASLtoAGL getPosASL player;
-							// if ((_playerPosAGL distance _end1) < 5 || (_playerPosAGL distance _end2) < 5) then {
-								// _nearVehiclesWithRopes =  _nearVehiclesWithRopes + [_vehicle];
-							// }
-						// };
-					// } forEach _ropes;
-				// };
-			// } forEach ([_vehicle] call ASL_Get_Active_Ropes);
-		// } forEach _nearVehicles;
-		// _nearVehiclesWithRopes;
-	// };
-	
-	// ASL_Switch_Vehicle_Actions = {
-		// {
-			// if (_x isKindOf "Air") then {[_x] call ASL_Add_Vehicle_Actions};
-		// } forEach vehicles;
-	// };
-	
+
 	ASL_Add_Vehicle_Actions = {
 		params ["_vehicle"];
 		private _exit = true;
 		{
 			if (_vehicle isKindOf _x && getMass _vehicle > ASL_MinVehicleMass) exitWith {_exit = false};
 		} foreach ASL_SUPPORTED_VEHICLES;
-		private ["_actionID"];
+		// diag_log formatText ["%1%2%3%4%5%6%7", time, "s  (ASL_Add_Vehicle_Actions)	_vehicle: ", _vehicle, ", mass: ", getMass _vehicle, ", min: ", ASL_MinVehicleMass];
 		if (_exit) exitWith {
-			private _actions = [
-				"ASL_ActionID_Deploy",
-				"ASL_ActionID_Retract",
-				"ASL_ActionID_Extend",
-				"ASL_ActionID_Shorten",
-				"ASL_ActionID_Release"
-			];
-			{
-				_actionID = _vehicle getVariable _x;
-				if (isNil{_actionID}) exitWith {};
-				_vehicle removeAction _actionID;
-				_vehicle setVariable [_x, nil];
-			} forEach _actions;
+			[_vehicle, ["ASL_ActionID_Deploy", "ASL_ActionID_Retract", "ASL_ActionID_Extend", "ASL_ActionID_Shorten", "ASL_ActionID_Release"]] call ASL_Remove_Actions;
 		};
 		
+		private ["_actionID"];
 		if (isNil{_vehicle getVariable "ASL_ActionID_Deploy"}) then {
 			_actionID = _vehicle addAction [
-				format[localize "STR_ASL_DEPLOY"],						// Title
-				{[_this select 0] call ASL_Deploy_Ropes_Action;},		// Script
-				nil,													// Arguments
-				0,														// Priority
-				false,													// showWindow
-				true,													// hideOnUse
-				"",														// Shortcut
-				"[_target, _this] call ASL_Deploy_Ropes_Action_Check"	// Condition
+				format[localize "STR_ASL_DEPLOY"],									// Title
+				{[_this select 0, _this select 1] call ASL_Deploy_Ropes_Action;},	// Script
+				nil,																// Arguments
+				0,																	// Priority
+				false,																// showWindow
+				true,																// hideOnUse
+				"",																	// Shortcut
+				"[_target, _this] call ASL_Deploy_Ropes_Action_Check"				// Condition
 			];
 			_vehicle setVariable ["ASL_ActionID_Deploy", _actionID];
 		};
-		
 		if (isNil{_vehicle getVariable "ASL_ActionID_Retract"}) then {
 			_actionID = _vehicle addAction [
 				format[localize "STR_ASL_RETRACT"],									// Title
@@ -1523,7 +1175,6 @@ ASL_Advanced_Sling_Loading_Install = {
 			];
 			_vehicle setVariable ["ASL_ActionID_Retract", _actionID];
 		};
-		
 		if (isNil{_vehicle getVariable "ASL_ActionID_Extend"}) then {
 			_actionID = _vehicle addAction [
 				format[localize "STR_ASL_EXTEND"],									// Title
@@ -1537,7 +1188,6 @@ ASL_Advanced_Sling_Loading_Install = {
 			];
 			_vehicle setVariable ["ASL_ActionID_Extend", _actionID];
 		};
-		
 		if (isNil{_vehicle getVariable "ASL_ActionID_Shorten"}) then {
 			_actionID = _vehicle addAction [
 				format[localize "STR_ASL_SHORTEN"],									// Title
@@ -1551,7 +1201,6 @@ ASL_Advanced_Sling_Loading_Install = {
 			];
 			_vehicle setVariable ["ASL_ActionID_Shorten", _actionID];
 		};
-		
 		if (isNil{_vehicle getVariable "ASL_ActionID_Release"}) then {
 			_actionID = _vehicle addAction [
 				format[localize "STR_ASL_RELEASE"],									// Title
@@ -1567,51 +1216,22 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 	};
 
-	ASL_Remove_Unit_Actions = {
-		params [["_unit", objNull], ["_actions", []]];
-		diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Remove_Unit_Actions) _unit: ", _unit, "    _actions: ", _actions];
-		if (isNull _unit) exitWith {false};
+	ASL_Remove_Actions = {
+		params [["_object", objNull], ["_actions", []]];
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Remove_Actions) _object: ", _object, "    _actions: ", _actions];
+		if (isNull _object) exitWith {false};
+		private ["_actionID"];
 		{
-			private _actionID = _unit getVariable _x;
+			_actionID = _object getVariable _x;
 			if !(isNil{_actionID}) then {
-				_unit removeAction _actionID;
-				_unit setVariable [_x, nil];
+				_object removeAction _actionID;
+				_object setVariable [_x, nil];
 			};
 		} forEach _actions;
 	};
 	
-	// ASL_Add_Player_Actions = {
-		// player addAction [format[localize "STR_ASL_PICKUP"], {
-			// [] call ASL_Pickup_Ropes_Action;
-		// }, nil, 0, false, true, "", "call ASL_Pickup_Ropes_Action_Check"];
-		
-		// player addAction [format[localize "STR_ASL_DROP"], {
-			// [] call ASL_Drop_Ropes_Action;
-		// }, nil, 0, false, true, "", "call ASL_Drop_Ropes_Action_Check"];
-		
-		// player addAction [format[localize "STR_ASL_ATTACH"], {
-			// [] call ASL_Attach_Ropes_Action;
-		// }, nil, 0, false, true, "", "call ASL_Attach_Ropes_Action_Check"];
-		
-		// player addEventHandler ["Respawn", {
-			// player setVariable ["ASL_Actions_Loaded", false];
-		// }];
-	// };
-	
 	if (!isDedicated) then {
 		["Air", "init", {_this call ASL_Add_Vehicle_Actions}, true] call CBA_fnc_addClassEventHandler; // adds init event to all air vehicles; has to be run preinit!
-		// [] spawn {
-			// while {true} do {
-				// if (!isNull player && isPlayer player) then {
-					// if !(player getVariable ["ASL_Actions_Loaded", false]) then {
-						// [] call ASL_Add_Player_Actions;
-						// player setVariable ["ASL_Actions_Loaded", true];
-					// };
-				// };
-				// missionNamespace setVariable ["ASL_Nearby_Vehicles", (call ASL_Find_Nearby_Vehicles)];
-				// sleep 2;
-			// };
-		// };
 	};
 	
 	ASL_RemoteExec = {
@@ -1641,10 +1261,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	if (isServer) then {
-		
-		// Adds support for exile network calls (Only used when running exile)
-		ASL_SUPPORTED_REMOTEEXECSERVER_FUNCTIONS = ["ASL_Hide_Object_Global"];
-		
+
 		ExileServer_AdvancedSlingLoading_network_AdvancedSlingLoadingRemoteExecServer = {
 			params ["_sessionId", "_messageParameters", ["_isCall", false]];
 			_messageParameters params ["_params", "_functionName"];
@@ -1700,6 +1317,6 @@ if (isServer) then {
 	if (isNil "ASL_PassengersAuthorized") then {ASL_PassengersAuthorized 			= false};	// Passengers authorized to manipulate ropes
 	if (isNil "ASL_MaxRopeDeployHeight") then {ASL_MaxRopeDeployHeight 				= 100};		// maximum rope deploy height in meter
 	if (isNil "ASL_MinVehicleMass") then {ASL_MinVehicleMass 						= 0};		// minimum mass a vehicle has to have to be able to deploy ropes
-	if (isNil "ASL_RopePickupDistance") then {ASL_RopePickupDistance 				= 5};		// distance in meter a unit has to be from a rope end to be able to pick up the rope
+	if (isNil "ASL_RopeHandlingDistance") then {ASL_RopeHandlingDistance 			= 5};		// distance in meter a unit has to be from a rope end to be able to pick up the rope
 	[] call ASL_Advanced_Sling_Loading_Install;
 };
