@@ -70,3 +70,21 @@
     true,
 	{[] call ASL_Switch_Vehicles_Actions}													// code executed on option changed AND on init
 ] call CBA_fnc_addSetting;
+
+[
+	"ASL_InitialDeployRopeLength",
+	"SLIDER",
+	[format[localize "STR_ASL_INITIAL_DEPLOY"], format[localize "STR_ASL_INITIAL_DEPLOY_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[5, 100, 15, 0],
+    true
+] call CBA_fnc_addSetting;
+
+[
+	"ASL_ExtendShortenRopeLength",
+	"SLIDER",
+	[format[localize "STR_ASL_EXTEND_SHORTEN"], format[localize "STR_ASL_EXTEND_SHORTEN_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[1, 25, 5, 0],
+    true
+] call CBA_fnc_addSetting;

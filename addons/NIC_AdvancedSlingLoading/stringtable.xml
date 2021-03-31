@@ -26,40 +26,40 @@
             <German>Piloten</German>
         </Key>
 		<Key ID="STR_ASL_PILOT_TIP">
-            <Original>Pilots are authorized to manipulate vehicle ropes.</Original>
-            <German>Piloten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+            <Original>Pilots are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Piloten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
         </Key>
 		<Key ID="STR_ASL_COMMANDER">
             <Original>Commanders</Original>
             <German>Komandanten</German>
         </Key>
 		<Key ID="STR_ASL_COMMANDER_TIP">
-            <Original>Commanders are authorized to manipulate vehicle ropes.</Original>
-            <German>Komandanten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+            <Original>Commanders are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Komandanten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
         </Key>
 		<Key ID="STR_ASL_COPILOT">
             <Original>Copilots</Original>
             <German>Kopiloten</German>
         </Key>
 		<Key ID="STR_ASL_COPILOT_TIP">
-            <Original>Copilots are authorized to manipulate vehicle ropes.</Original>
-            <German>Kopiloten sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+            <Original>Copilots are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Kopiloten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
         </Key>
 		<Key ID="STR_ASL_GUNNER">
             <Original>Gunners</Original>
             <German>Kanoniere</German>
         </Key>
 		<Key ID="STR_ASL_GUNNER_TIP">
-            <Original>Gunner are authorized to manipulate vehicle ropes.</Original>
-            <German>Kanoniere sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+            <Original>Gunner are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Kanoniere sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
         </Key>
 		<Key ID="STR_ASL_PASSENGER">
             <Original>Passengers</Original>
             <German>Passagiere</German>
         </Key>
 		<Key ID="STR_ASL_PASSENGER_TIP">
-            <Original>Passengers are authorized to manipulate vehicle ropes.</Original>
-            <German>Passagiere sind berechtigt, Seile von Fahrzeugen zu manipulieren.</German>
+            <Original>Passengers are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Passagiere sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
         </Key>
 		<Key ID="STR_ASL_MAX_DEPLOY_HEIGHT">
             <Original>Maximum Deploy Height</Original>
@@ -76,6 +76,22 @@
 		<Key ID="STR_ASL_MIN_MASS_TIP">
             <Original>Minimal mass in kilogram a vehicle has to have, for ropes to be able to be deployed from that vehicle.</Original>
             <German>Minimales Gewicht in Kilogramm, das ein Fahrzeug haben muss, um Frachtseile von diesem Fahrzeug ausfahren zu können.</German>
+        </Key>
+		<Key ID="STR_ASL_INITIAL_DEPLOY">
+            <Original>Deploy Rope Length</Original>
+            <German>Ausfahrseillänge</German>
+        </Key>
+		<Key ID="STR_ASL_INITIAL_DEPLOY_TIP">
+            <Original>Initial length (meter) of a rope being deployed.</Original>
+            <German>Initiallänge des Seils (Meter), wenn es ausgefahren wird.</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_SHORTEN">
+            <Original>Extend / Shorten Rope Length</Original>
+            <German>Ausfahr- / Kürzseillänge</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_SHORTEN_TIP">
+            <Original>Length (meter) added or taken from a rope, that is extended / shortened.</Original>
+            <German>Hinzugegebene oder abgezogene Länge (Meter) von einem Seil, das ausgefarhen / gekürzt wird.</German>
         </Key>
 		<Key ID="STR_ASL_DEPLOY">
             <Original>Deploy Cargo Ropes</Original>
@@ -176,6 +192,14 @@
 		<Key ID="STR_ASL_CENTER">
             <Original>Center</Original>
             <German>Zentral</German>
+        </Key>
+		<Key ID="STR_ASL_SUCCESS">
+            <Original>Success</Original>
+            <German>Erfolgreich</German>
+        </Key>
+		<Key ID="STR_ASL_WHOOPS">
+            <Original>Whoops</Original>
+            <German>Uups</German>
         </Key>
 	</Package>
 </Project>
