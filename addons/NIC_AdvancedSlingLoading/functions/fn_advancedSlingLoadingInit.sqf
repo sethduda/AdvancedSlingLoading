@@ -1330,7 +1330,7 @@ if (isServer) then {
 	if (isNil "ASL_MaxRopeDeployHeight") then {ASL_MaxRopeDeployHeight 				= 100};		// maximum rope deploy height in meter
 	if (isNil "ASL_MinVehicleMass") then {ASL_MinVehicleMass 						= 0};		// minimum mass a vehicle has to have to be able to deploy ropes
 	if (isNil "ASL_RopeHandlingDistance") then {ASL_RopeHandlingDistance 			= 5};		// distance in meter a unit has to be from a rope end to be able to pick up the rope
-	if (isNil "ASL_InitialDeployRopeLength") then {ASL_InitialDeployRopeLength 		= 15};		// rope length in meter, when rope is deployed
+	if (isNil "ASL_InitialDeployRopeLength") then {ASL_InitialDeployRopeLength 		= 15};		// initial rope length in meter, when rope is deployed
 	if (isNil "ASL_ExtendShortenRopeLength") then {ASL_ExtendShortenRopeLength 		= 5};		// rope length in meter, when rope is extended / shortened
 	[] call ASL_Advanced_Sling_Loading_Install;
 };
