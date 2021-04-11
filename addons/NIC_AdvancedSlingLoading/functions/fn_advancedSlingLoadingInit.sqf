@@ -975,7 +975,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		hideObjectGlobal _helper;
 		_unit setVariable ["ASL_Ropes_Vehicle", [_vehicle, _ropesIndex], true];
 		_unit setVariable ["ASL_Ropes_Pick_Up_Helper", _helper, true];
-		
 		private ["_actionID"];
 		if (isNil{_unit getVariable "ASL_ActionID_Attach"}) then {		
 			_actionID = _unit addAction [								// add 'attach to' action, once unit has picked up some ropes
@@ -989,8 +988,7 @@ ASL_Advanced_Sling_Loading_Install = {
 				"[_this] call ASL_Attach_Ropes_Action_Check"			// Condition
 			];
 			_unit setVariable ["ASL_ActionID_Attach", _actionID];
-		};
-		
+		};		
 		if (isNil{_unit getVariable "ASL_ActionID_Drop"}) then {		
 			_actionID = _unit addAction [								// add 'drop ropes' action, once unit has picked up some ropes
 				format[localize "STR_ASL_DROP"],						// Title
@@ -1159,7 +1157,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		if (_exit) exitWith {
 			[_vehicle, ["ASL_ActionID_Deploy", "ASL_ActionID_Retract", "ASL_ActionID_Extend", "ASL_ActionID_Shorten", "ASL_ActionID_Release"]] call ASL_Remove_Actions;
 		};
-		
 		private ["_actionID"];
 		if (isNil{_vehicle getVariable "ASL_ActionID_Deploy"}) then {
 			_actionID = _vehicle addAction [
@@ -1227,7 +1224,7 @@ ASL_Advanced_Sling_Loading_Install = {
 			_vehicle setVariable ["ASL_ActionID_Release", _actionID];
 		};
 	};
-
+	
 	ASL_Remove_Actions = {
 		params [["_object", objNull], ["_actions", []]];
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Remove_Actions) _object: ", _object, "    _actions: ", _actions];
@@ -1273,7 +1270,6 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	if (isServer) then {
-
 		ExileServer_AdvancedSlingLoading_network_AdvancedSlingLoadingRemoteExecServer = {
 			params ["_sessionId", "_messageParameters", ["_isCall", false]];
 			_messageParameters params ["_params", "_functionName"];
@@ -1285,7 +1281,6 @@ ASL_Advanced_Sling_Loading_Install = {
 				};
 			};
 		};
-		
 		ASL_SUPPORTED_REMOTEEXECCLIENT_FUNCTIONS = [
 			"ASL_Pickup_Ropes", 
 			"ASL_Deploy_Ropes_Index", 
@@ -1299,7 +1294,6 @@ ASL_Advanced_Sling_Loading_Install = {
 			"ASL_Attach_Ropes", 
 			"ASL_Drop_Ropes"
 		];
-		
 		ExileServer_AdvancedSlingLoading_network_AdvancedSlingLoadingRemoteExecClient = {
 			params ["_sessionId", "_messageParameters"];
 			_messageParameters params ["_params", "_functionName", "_target", ["_isCall", false]];
@@ -1316,7 +1310,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		publicVariable "ASL_Advanced_Sling_Loading_Install";
 		remoteExecCall ["ASL_Advanced_Sling_Loading_Install", -2, true];
 	};
-
+	
 	diag_log "Advanced Sling Loading Loaded";
 };
 
