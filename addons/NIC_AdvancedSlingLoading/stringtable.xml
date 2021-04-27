@@ -93,6 +93,22 @@
             <Original>Length (meter) added or taken from a rope, that is extended / shortened.</Original>
             <German>Hinzugegebene oder abgezogene Länge (Meter) von einem Seil, das ausgefarhen / gekürzt wird.</German>
         </Key>
+		<Key ID="STR_ASL_DEFAULT_MASS">
+            <Original>Default Liftable Mass</Original>
+            <German>Standardschlinglastmasse</German>
+        </Key>
+		<Key ID="STR_ASL_DEFAULT_MASS_TIP">
+            <Original>Default liftable mass in kg a vehicle can lift.</Original>
+            <German>Standardschlinglastmasse in kg, die ein Fahrzeug anheben kann.</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_MASS">
+            <Original>Maximum Liftable Mass Factor</Original>
+            <German>Maximalschlinglastmassenfaktor</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_MASS_TIP">
+            <Original>Maximum liftable mass factor a vehicle can lift (factor * vehicle lift capabilty).</Original>
+            <German>Faktor der die Maximalschlinglastmasse bestimmt (Faktor * Fahrzeughebekapazität).</German>
+        </Key>
 		<Key ID="STR_ASL_DEPLOY">
             <Original>Deploy Cargo Ropes</Original>
             <German>Frachtseile Ausfahren</German>

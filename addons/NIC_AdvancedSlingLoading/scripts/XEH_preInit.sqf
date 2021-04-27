@@ -6,7 +6,6 @@
 	[30, 150, 100, 0],																		// data for this setting: [_min, _max, _default, _trailingDecimals]
     true																					// "_isGlobal" flag. Set this to true to always have this setting synchronized between all clients in multiplayer
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_MaxDeployRetractDistance",
 	"SLIDER",
@@ -15,7 +14,6 @@
 	[3, 30, 10, 0],
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_PilotsAuthorized",
     "CHECKBOX",
@@ -24,7 +22,6 @@
 	true,																					// default setting
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_CopilotsAuthorized", 
     "CHECKBOX",
@@ -33,7 +30,6 @@
 	true,
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_GunnersAuthorized",
     "CHECKBOX",
@@ -42,7 +38,6 @@
 	false,
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_PassengersAuthorized",
     "CHECKBOX",
@@ -51,7 +46,6 @@
 	false,
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_MaxRopeDeployHeight",
 	"SLIDER",
@@ -60,7 +54,6 @@
 	[0, 1000, 100, 0],
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_MinVehicleMass",
 	"SLIDER",
@@ -70,7 +63,6 @@
     true,
 	{[] call ASL_Switch_Vehicles_Actions}													// code executed on option changed AND on init
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_InitialDeployRopeLength",
 	"SLIDER",
@@ -79,12 +71,27 @@
 	[5, 100, 15, 0],
     true
 ] call CBA_fnc_addSetting;
-
 [
 	"ASL_ExtendShortenRopeLength",
 	"SLIDER",
 	[format[localize "STR_ASL_EXTEND_SHORTEN"], format[localize "STR_ASL_EXTEND_SHORTEN_TIP"]],
 	format[localize "STR_ASL_TITLE"],
 	[1, 25, 5, 0],
+    true
+] call CBA_fnc_addSetting;
+[
+	"ASL_DefaultLiftableMass",
+	"SLIDER",
+	[format[localize "STR_ASL_DEFAULT_MASS"], format[localize "STR_ASL_DEFAULT_MASS_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[500, 10000, 4000, 0],
+    true
+] call CBA_fnc_addSetting;
+[
+	"ASL_MaxLiftableMassFactor",
+	"SLIDER",
+	[format[localize "STR_ASL_MAX_MASS"], format[localize "STR_ASL_MAX_MASS_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[1, 20, 8, 0],
     true
 ] call CBA_fnc_addSetting;

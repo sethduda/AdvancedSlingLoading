@@ -22,13 +22,27 @@ ASL_Advanced_Sling_Loading_Install = {
 	if (!isNil "ASL_ROPE_INIT") exitWith {};		// Prevent advanced sling loading from installing twice
 	ASL_ROPE_INIT = true;
 	
+	// if (isNil "ASL_MaxRopeLength") then {ASL_MaxRopeLength 							= 100};		// maximum rope length in meter
+	// if (isNil "ASL_MaxDeployRetractDistance") then {ASL_MaxDeployRetractDistance 	= 10};		// maximum rope deploy, retract distance in meter (when player is on foot)
+	// if (isNil "ASL_PilotsAuthorized") then {ASL_PilotsAuthorized 					= true};	// pilots authorized to manipulate ropes
+	// if (isNil "ASL_CopilotsAuthorized") then {ASL_CopilotsAuthorized 				= true};	// copilots authorized to manipulate ropes
+	// if (isNil "ASL_GunnersAuthorized") then {ASL_GunnersAuthorized 					= false};	// gunners authorized to manipulate ropes
+	// if (isNil "ASL_PassengersAuthorized") then {ASL_PassengersAuthorized 			= false};	// passengers authorized to manipulate ropes
+	// if (isNil "ASL_MaxRopeDeployHeight") then {ASL_MaxRopeDeployHeight 				= 100};		// maximum rope deploy height in meter
+	// if (isNil "ASL_MinVehicleMass") then {ASL_MinVehicleMass 						= 0};		// minimum mass a vehicle has to have to be able to deploy ropes
+	// if (isNil "ASL_RopeHandlingDistance") then {ASL_RopeHandlingDistance 			= 5};		// distance in meter a unit has to be from a rope end to be able to pick up the rope
+	// if (isNil "ASL_InitialDeployRopeLength") then {ASL_InitialDeployRopeLength 		= 15};		// initial rope length in meter, when rope is deployed
+	// if (isNil "ASL_ExtendShortenRopeLength") then {ASL_ExtendShortenRopeLength 		= 5};		// rope length in meter, when rope is extended / shortened
+	// if (isNil "ASL_DefaultLiftableMass") then {ASL_DefaultLiftableMass 				= 4000};	// default mass in kg, which can be lifted
+	// if (isNil "ASL_MaxLiftableMassFactor") then {ASL_MaxLiftableMassFactor 			= 8};		// maximum liftable mass factor (ASL_Rope_Get_Lift_Capability * ASL_MaxLiftableMassFactor)
+	
 	diag_log "Advanced Sling Loading Loading...";
 	
 	ASL_Rope_Get_Lift_Capability = {
 		params ["_vehicle"];
 		private _slingLoadMaxCargoMass = getNumber (configFile >> "CfgVehicles" >> typeOf _vehicle >> "slingLoadMaxCargoMass");
 		if (_slingLoadMaxCargoMass <= 0) then {
-			_slingLoadMaxCargoMass = 4000;
+			_slingLoadMaxCargoMass = ASL_DefaultLiftableMass;
 		};
 		_slingLoadMaxCargoMass;	
 	};
@@ -52,14 +66,12 @@ ASL_Advanced_Sling_Loading_Install = {
 		_frontCenterPoint = ((_rearCenterPoint vectorDiff _frontCenterPoint) vectorMultiply 0.2) vectorAdd _frontCenterPoint;
 		private _middleCenterPoint = ((_frontCenterPoint vectorDiff _rearCenterPoint) vectorMultiply 0.5) vectorAdd _rearCenterPoint;
 		private _vehicleUnitVectorUp = vectorNormalized (vectorUp _vehicle);
-		
 		private _slingLoadPointHeightOffset = 0;
 		{
 			if (_vehicle isKindOf (_x select 0)) exitWith {
 				_slingLoadPointHeightOffset = (_x select 1);
 			};
 		} forEach ASL_SLING_LOAD_POINT_CLASS_HEIGHT_OFFSET;
-		
 		private _slingLoadPoints = [];
 		private ["_modelPoint",
 			"_modelPointASL", 
@@ -85,10 +97,8 @@ ASL_Advanced_Sling_Loading_Install = {
 			// If if does, move surfaceIntersectStartASL above ground level (lineIntersectsSurfaces
 			// doesn't work if starting below ground level for some reason
 			// See: https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection
-			
 			_la = ASLToAGL _surfaceIntersectStartASL;
 			_lb = ASLToAGL _surfaceIntersectEndASL;
-			
 			if (_la select 2 < 0 && _lb select 2 > 0) then {
 				_n = [0, 0, 1];
 				_p0 = [0, 0, 0.1];
@@ -131,47 +141,42 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Get_Corner_Points = {
 		params ["_vehicle"];
-		
-		// Correct width and length factor for air
-		private _widthFactor = 0.5;
-		private _lengthFactor = 0.5;
-		if (_vehicle isKindOf "Air") then {
-			_widthFactor = 0.3;
+		private _widthFactor	= 0.5;
+		private _lengthFactor	= 0.5;
+		if (_vehicle isKindOf "Air") then {				 	// Correct width and length factor for air
+			_widthFactor		= 0.3;
 		};
 		if (_vehicle isKindOf "Helicopter") then {
-			_widthFactor = 0.2;
-			_lengthFactor = 0.45;
+			_widthFactor		= 0.2;
+			_lengthFactor		= 0.45;
 		};
-		
-		private _centerOfMass = getCenterOfMass _vehicle;
-		private _bbr = boundingBoxReal _vehicle;
-		private _p1 = _bbr select 0;
-		private _p2 = _bbr select 1;
-		private _maxWidth = abs ((_p2 select 0) - (_p1 select 0));
-		private _widthOffset = ((_maxWidth / 2) - abs (_centerOfMass select 0)) * _widthFactor;
-		private _maxLength = abs ((_p2 select 1) - (_p1 select 1));
-		private _lengthOffset = ((_maxLength / 2) - abs (_centerOfMass select 1)) * _lengthFactor;
-		private _maxHeight = abs ((_p2 select 2) - (_p1 select 2));
-		private _heightOffset = _maxHeight / 6;
-		
-		private _rearCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
-		private _rearCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
-		private _frontCorner = [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset];
-		private _frontCorner2 = [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset];
-		
+		private _centerOfMass 	= getCenterOfMass _vehicle;
+		private _bbr			= boundingBoxReal _vehicle;
+		private _p1				= _bbr select 0;
+		private _p2				= _bbr select 1;
+		private _maxWidth		= abs ((_p2 select 0) - (_p1 select 0));
+		private _widthOffset	= ((_maxWidth / 2) - abs (_centerOfMass select 0)) * _widthFactor;
+		private _maxLength		= abs ((_p2 select 1) - (_p1 select 1));
+		private _lengthOffset	= ((_maxLength / 2) - abs (_centerOfMass select 1)) * _lengthFactor;
+		private _maxHeight		= abs ((_p2 select 2) - (_p1 select 2));
+		private _heightOffset	= _maxHeight / 6;
+		private _rearCorner		= [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
+		private _rearCorner2	= [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) - _lengthOffset, (_centerOfMass select 2) + _heightOffset];
+		private _frontCorner	= [(_centerOfMass select 0) + _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset];
+		private _frontCorner2	= [(_centerOfMass select 0) - _widthOffset, (_centerOfMass select 1) + _lengthOffset, (_centerOfMass select 2) + _heightOffset];
 		[_rearCorner, _rearCorner2, _frontCorner, _frontCorner2];
 	};
 	
 	ASL_Rope_Set_Mass = {
-		private _obj = [_this, 0] call BIS_fnc_param;
-		private _mass = [_this, 1] call BIS_fnc_param;
+		private _obj 	= [_this, 0] call BIS_fnc_param;
+		private _mass 	= [_this, 1] call BIS_fnc_param;
 		_obj setMass _mass;
 	};
 	
 	ASL_Rope_Adjust_Mass = {
 		params ["_obj", "_heli", ["_ropes", []]];
 		private _lift = [_heli] call ASL_Rope_Get_Lift_Capability;
-		private _maxLiftableMass = _lift * 8;
+		private _maxLiftableMass = _lift * ASL_MaxLiftableMassFactor;
 		private _originalMass = getMass _obj;
 		private _heavyLiftMinLift = missionNamespace getVariable ["ASL_HEAVY_LIFTING_MIN_LIFT_OVERRIDE", 5000];
 		// diag_log formatText [
@@ -257,7 +262,8 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	ASL_Get_Active_Ropes_With_Cargo = {
-		params ["_vehicle"];
+		// params ["_vehicle"];
+		params [["_vehicle", objNull], ["_unit", objNull]];
 		private _activeRopesWithCargo = [];
 		private _existingCargo = _vehicle getVariable ["ASL_Cargo", []];
 		private _activeRopes = _this call ASL_Get_Active_Ropes;
@@ -265,6 +271,9 @@ ASL_Advanced_Sling_Loading_Install = {
 		{
 			_cargo = _existingCargo select (_x select 0);
 			if (!isNull _cargo) then {
+				if ((!alive _cargo || ropeAttachedTo _cargo != _vehicle) && !isNull _unit) exitWith {
+					[_vehicle, _unit, _foreachindex] call ASL_Release_Cargo;  // in case cargo destroyed
+				};
 				_activeRopesWithCargo pushBack _x;
 			};
 		} forEach _activeRopes;
@@ -493,13 +502,15 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 		if (vehicle _unit == _vehicle && [_vehicle, _unit] call ASL_Is_Unit_Authorized) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Release_Cargo_Action_Check) EXIT 2, can release: ", [_vehicle, _unit] call ASL_Can_Release_Cargo];
-			[_vehicle] call ASL_Can_Release_Cargo
+			// [_vehicle] call ASL_Can_Release_Cargo
+			[_vehicle, _unit] call ASL_Can_Release_Cargo
 		};
 		false
 	};
 	
 	ASL_Can_Release_Cargo = {
-		params ["_vehicle"];
+		// params ["_vehicle"];
+		params [["_vehicle", objNull], ["_unit", objNull]];
 		if !([_vehicle] call ASL_Is_Supported_Vehicle) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Release_Cargo) EXIT 1"];
 			false
@@ -509,7 +520,9 @@ ASL_Advanced_Sling_Loading_Install = {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Release_Cargo) EXIT 2"];
 			false
 		};
-		private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes_With_Cargo;
+		// private _activeRopes = [_vehicle] call ASL_Get_Active_Ropes_With_Cargo;
+		private _activeRopes = [_vehicle, _unit] call ASL_Get_Active_Ropes_With_Cargo;
+		
 		if (count _activeRopes == 0) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Release_Cargo) EXIT 3"];
 			false
@@ -531,7 +544,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		ASL_ParamMenuUnit = _unit;								// this ugly workaround is because there is NO way passing the 'caller' of the menu to the menu itself
 		[format[localize "STR_ASL_RELEASE"], "ASL_Release_Cargo_Index_Action", _activeRopes, "Cargo"] call ASL_Show_Select_Ropes_Menu;
 	};
-
+	
 	ASL_Release_Cargo_Index_Action = {
 		params ["_ropesIndex"];
 		private _unit = ASL_ParamMenuUnit;
@@ -557,7 +570,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		_vehicle setVariable ["ASL_Cargo", _allCargo, true];
 		_this call ASL_Retract_Ropes;
 	};
-
+	
 	ASL_Retract_Ropes_Action_Check = {
 		params ["_vehicle", "_unit"];
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Retract_Ropes_Action_Check) _vehicle: ", _vehicle, "    _unit: ", _unit];
@@ -811,7 +824,6 @@ ASL_Advanced_Sling_Loading_Install = {
 	};
 	
 	ASL_Deploy_Ropes_Index = {
-		// params ["_vehicle", "_unit", ["_ropesIndex", 0], ["_ropeLength", 15]];
 		params ["_vehicle", "_unit", ["_ropesIndex", 0]];
 		if !(local _vehicle) exitWith {[_this, "ASL_Deploy_Ropes_Index", _vehicle, true] call ASL_RemoteExec};
 		private _existingRopes = [_vehicle, _ropesIndex] call ASL_Get_Ropes;
@@ -824,7 +836,6 @@ ASL_Advanced_Sling_Loading_Install = {
 		};
 		{
 			_x setVariable ["ASL_Ropes_Vehicle", [_vehicle, _ropesIndex], true];   	// memory vehicle and rope index on each rope 
-			// ropeUnwind [_x, 5, _ropeLength];
 			ropeUnwind [_x, 5, ASL_InitialDeployRopeLength];
 		} forEach _cargoRopes;
 		private _allRopes = _vehicle getVariable ["ASL_Ropes", []];
@@ -1134,7 +1145,7 @@ ASL_Advanced_Sling_Loading_Install = {
 			if (_isSuccess) then {
 				[format[localize "STR_ASL_SUCCESS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
 			} else {
-				[[format[localize "STR_ASL_WHOOPS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
+				[format[localize "STR_ASL_WHOOPS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
 			};
 		} else {
 			hint _msg;
@@ -1326,5 +1337,7 @@ if (isServer) then {
 	if (isNil "ASL_RopeHandlingDistance") then {ASL_RopeHandlingDistance 			= 5};		// distance in meter a unit has to be from a rope end to be able to pick up the rope
 	if (isNil "ASL_InitialDeployRopeLength") then {ASL_InitialDeployRopeLength 		= 15};		// initial rope length in meter, when rope is deployed
 	if (isNil "ASL_ExtendShortenRopeLength") then {ASL_ExtendShortenRopeLength 		= 5};		// rope length in meter, when rope is extended / shortened
+	if (isNil "ASL_DefaultLiftableMass") then {ASL_DefaultLiftableMass 				= 4000};	// default mass in kg, which can be lifted
+	if (isNil "ASL_MaxLiftableMassFactor") then {ASL_MaxLiftableMassFactor 			= 8};		// maximum liftable mass factor (ASL_Rope_Get_Lift_Capability * ASL_MaxLiftableMassFactor)
 	[] call ASL_Advanced_Sling_Loading_Install;
 };
