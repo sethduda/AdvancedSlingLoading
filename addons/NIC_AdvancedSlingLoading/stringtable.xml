@@ -193,6 +193,10 @@
             <Original>All</Original>
             <German>Alle</German>
         </Key>
+		<Key ID="STR_ASL_CARGO">
+            <Original>Cargo</Original>
+            <German>Fracht</German>
+        </Key>
 		<Key ID="STR_ASL_ROPE">
             <Original>Ropes</Original>
             <German>Seile</German>
