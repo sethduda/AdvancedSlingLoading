@@ -107,7 +107,7 @@
         </Key>
 		<Key ID="STR_ASL_MAX_MASS_TIP">
             <Original>Maximum liftable mass factor a vehicle can lift (factor * vehicle lift capabilty).</Original>
-            <German>Faktor der die Maximalschlinglastmasse bestimmt (Faktor * Fahrzeughebekapazität).</German>
+            <German>Faktor, der die Maximalschlinglastmasse bestimmt (Faktor * Fahrzeughebekapazität).</German>
         </Key>
 		<Key ID="STR_ASL_DEPLOY">
             <Original>Deploy Cargo Ropes</Original>
@@ -143,7 +143,7 @@
         </Key>
 		<Key ID="STR_ASL_CANNOT_DEPLOY">
             <Original>Cannot deploy cargo ropes from locked vehicle</Original>
-            <German>Frachtseile können von verschlossenen Fahrzeugen nicht ausgefahren werden</German>
+            <German>Frachtseile können nicht von verschlossenen Fahrzeugen aus ausgefahren werden</German>
         </Key>
 		<Key ID="STR_ASL_ROPES">
             <Original>Deploy Ropes</Original>
@@ -175,15 +175,15 @@
         </Key>
 		<Key ID="STR_ASL_TOO_SHORT">
             <Original>Cargo ropes too short. Extend ropes or move vehicle closer.</Original>
-            <German>Frachtseile zu kurz. Seile weiter ausfahren oder Fahrzeug näher bringen.</German>
+            <German>Frachtseile zu kurz. Seile weiter ausfahren oder Fahrzeug näher fahren.</German>
         </Key>
 		<Key ID="STR_ASL_CANT_ATTACH">
             <Original>Cannot attach cargo ropes to locked vehicle.</Original>
-            <German>Frachtseile können nicht an verschlossene Fahrzeuge befestigt werden.</German>
+            <German>Frachtseile können nicht an verschlossenen Fahrzeugen befestigt werden.</German>
         </Key>
 		<Key ID="STR_ASL_CANT_SAFE">
             <Original>Cannot attach cargo ropes in safe zone.</Original>
-            <German>Frachtseile können nicht bfestigt werden in sicheren Zonen.</German>
+            <German>Frachtseile können in sicheren Zonen nicht bfestigt werden.</German>
         </Key>
 		<Key ID="STR_ASL_CANT_PICKUP">
             <Original>Cannot pick up cargo ropes from locked vehicle.</Original>
@@ -216,6 +216,66 @@
 		<Key ID="STR_ASL_WHOOPS">
             <Original>Whoops</Original>
             <German>Uups</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_DEPLOYED">
+            <Original>Ropes deployed (%1 m)</Original>
+            <German>Seile ausgefahren (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED">
+            <Original>Ropes extended</Original>
+            <German>Seile verlängert</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO">
+            <Original>Ropes extended to %1 m</Original>
+            <German>Seile auf %1 m verlängert</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO_IND">
+            <Original>%1 ropes %2 m</Original>
+            <German>%1 Seile %2 m</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY_MAX_LENGTH">
+            <Original>Ropes already at maximum lenghth (%1 m)</Original>
+            <German>Seile bereits auf Maximallänge (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED">
+            <Original>Ropes shortened</Original>
+            <German>Seile verkürzt</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED_TO">
+            <Original>Ropes shortened to %1 m</Original>
+            <German>Seile auf %1 m verkürzt</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED_TO_IND">
+            <Original>%1 ropes %2 m</Original>
+            <German>%1 Seile %2 m</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY_MIN_LENGTH">
+            <Original>Ropes already at minimum length (%1 m)</Original>
+            <German>Seile bereits auf Minimallänge (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_DROP">
+            <Original>Minimum Rope Length Drop Cargo</Original>
+            <German>Minimalseillänge Ladung Lösen</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_DROP_TIP">
+            <Original>Drop cargo, when ropes were already retracted to their minimal length, and ropes are retracted once more.</Original>
+            <German>Ladung Lösen, wenn Seile bereits auf Minimalseillänge verkürzt wurden, und Seile ein weiteres mal verkürzt werden.</German>
+        </Key>
+		<Key ID="STR_DROP_CARGO_KEY">
+            <Original>Drop Cargo</Original>
+            <German>Ladung Lösen</German>
+        </Key>
+		<Key ID="STR_DROP_CARGO_KEY_TIP">
+            <Original>Drop all cargo and retract all ropes.</Original>
+            <German>Alle Ladung Lösen und alle Seile einfahren.</German>
+		</Key>
+		<Key ID="STR_ROPE_HANDLING_DIST">
+            <Original>Rope Handling Distance</Original>
+            <German>Seilmanipulationsentfernung</German>
+        </Key>
+		<Key ID="STR_ROPE_HANDLING_DIST_TIP">
+            <Original>Rope hanling distance in meter from a unit to a rope end.</Original>
+            <German>Seilmanipulationsentfernung in meter von einer Einheit zu einem Seilende.</German>
         </Key>
 	</Package>
 </Project>

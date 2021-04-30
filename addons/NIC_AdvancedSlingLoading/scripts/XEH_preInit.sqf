@@ -95,3 +95,19 @@
 	[1, 20, 8, 0],
     true
 ] call CBA_fnc_addSetting;
+[
+	"ASL_MinRopeLengthDropCargo",
+    "CHECKBOX",
+	[format[localize "STR_ASL_MIN_MASS_DROP"], format[localize "STR_ASL_MIN_MASS_DROP_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	false,
+    true
+] call CBA_fnc_addSetting;
+[
+	"ASL_RopeHandlingDistance",
+	"SLIDER",
+	[format[localize "STR_ROPE_HANDLING_DIST"], format[localize "STR_ROPE_HANDLING_DIST_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[2, 20, 5, 0],
+    true
+] call CBA_fnc_addSetting;

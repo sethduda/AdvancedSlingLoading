@@ -43,7 +43,8 @@ class Extended_PreInit_EventHandlers {
 		init = "call compile preprocessFileLineNumbers '\SA_AdvancedSlingLoading\scripts\XEH_preInit.sqf'"; // CBA_a3 integration
 	};
 };
-// class cfgMods {
-	// author		= "76561198131707990";
-	// timepacked	= "1473204282";
-// };
+class Extended_PostInit_EventHandlers {
+	class SA {
+		init = "call compile preprocessFileLineNumbers '\SA_AdvancedSlingLoading\scripts\XEH_postInit.sqf'"; // CBA key binding integration
+	};
+};
