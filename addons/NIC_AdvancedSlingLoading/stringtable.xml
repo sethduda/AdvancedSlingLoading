@@ -14,12 +14,12 @@
             <German>Maximale Seillänge in Meter vom Fahrzeug bis zur Ladung.</German>
         </Key>
 		<Key ID="STR_ASL_MAX_DIST">
-            <Original>Maximal Deploy / Retract Range</Original>
-            <German>Maximale Ausfahr- / Einfahrreichweite</German>
+            <Original>Maximal Deploy / Retract Manipulation Range</Original>
+            <German>Maximale Ausfahr- / Einfahrmanipulationsreichweite</German>
         </Key>
 		<Key ID="STR_ASL_MAX_DIST_TIP">
-            <Original>When player is on foot, maximal range in meter from player to vehicle, up to whitch deploying / retracting ropes is possible.</Original>
-            <German>Wenn Spieler zu Fuß ist, maximale Reichweite in Meter von Spieler zu Fahrzeug, bis zu welcher Seile Aus- oder Eingefahren werden können.</German>
+            <Original>When player is on foot, maximal range in meter from player to vehicle, up to whitch external maipulation of ropes is possible (deploying / retracting).</Original>
+            <German>Wenn Spieler zu Fuß ist, maximale Reichweite in Meter von Spieler zu Fahrzeug, bis zu der Seile von außerhalb manipulert werden können (Aus- oder Eingefahren).</German>
         </Key>
 		<Key ID="STR_ASL_PILOT">
             <Original>Pilots</Original>
@@ -229,9 +229,17 @@
             <Original>Ropes extended</Original>
             <German>Seile verlängert</German>
         </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TG">
+            <Original>%1 to Ground</Original>
+            <German>%1 auf Grund</German>
+        </Key>
 		<Key ID="STR_ASL_ROPES_EXTENDED_TO">
             <Original>Ropes extended to %1 m</Original>
             <German>Seile auf %1 m verlängert</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO_G">
+            <Original>Ropes extended to ground (%1 m)</Original>
+            <German>Seile auf Grund verlängert (%1 m)</German>
         </Key>
 		<Key ID="STR_ASL_ROPES_EXTENDED_TO_IND">
             <Original>%1 ropes %2 m</Original>
@@ -280,6 +288,23 @@
 		<Key ID="STR_ROPE_HANDLING_DIST_TIP">
             <Original>Rope hanling distance in meter from a unit to a rope end.</Original>
             <German>Seilmanipulationsentfernung in meter von einer Einheit zu einem Seilende.</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_RETRACTED">
+            <Original>Ropes Retracted</Original>
+            <German>Seile Eingefahren</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_TG">
+            <Original>Extend Cargo Ropes To Ground</Original>
+            <German>Frachtseile Bis Grund Verlängern</German>
+        </Key>
+		
+		<Key ID="STR_ROPE_MESSAGES">
+            <Original>Rope Change Messages</Original>
+            <German>Seilveränderungsbenachrichtigungen</German>
+        </Key>
+		<Key ID="STR_ROPE_MESSAGES_TIP">
+            <Original>Show rope changes to players via hints (rope length, etc.).</Original>
+            <German>Spieler erhalten per Hinweise Informationen über Seilveränderungen (Seillänge, etc.).</German>
         </Key>
 	</Package>
 </Project>
