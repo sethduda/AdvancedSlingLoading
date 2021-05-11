@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project name="NIC_AdvancedSlingLoading">
+    <Package name="NIC_ASL">
+		<Key ID="STR_ASL_TITLE">
+            <Original>NIC Advanced Sling Loading</Original>
+            <German>NIC Fortgeschrittene Schlinglast</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_LENGTH">
+            <Original>Maximum Rope Lenth</Original>
+            <German>Maximale Seillänge</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_LENGTH_TIP">
+            <Original>Maximum rope lenth in meter from vehicle to load.</Original>
+            <German>Maximale Seillänge in Meter vom Fahrzeug bis zur Ladung.</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DIST">
+            <Original>Maximal Deploy / Retract Manipulation Range</Original>
+            <German>Maximale Ausfahr- / Einfahrmanipulationsreichweite</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DIST_TIP">
+            <Original>When player is on foot, maximal range in meter from player to vehicle, up to whitch external maipulation of ropes is possible (deploying / retracting).</Original>
+            <German>Wenn Spieler zu Fuß ist, maximale Reichweite in Meter von Spieler zu Fahrzeug, bis zu der Seile von außerhalb manipulert werden können (Aus- oder Eingefahren).</German>
+        </Key>
+		<Key ID="STR_ASL_PILOT">
+            <Original>Pilots</Original>
+            <German>Piloten</German>
+        </Key>
+		<Key ID="STR_ASL_PILOT_TIP">
+            <Original>Pilots are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Piloten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
+        </Key>
+		<Key ID="STR_ASL_COMMANDER">
+            <Original>Commanders</Original>
+            <German>Komandanten</German>
+        </Key>
+		<Key ID="STR_ASL_COMMANDER_TIP">
+            <Original>Commanders are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Komandanten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
+        </Key>
+		<Key ID="STR_ASL_COPILOT">
+            <Original>Copilots</Original>
+            <German>Kopiloten</German>
+        </Key>
+		<Key ID="STR_ASL_COPILOT_TIP">
+            <Original>Copilots are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Kopiloten sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
+        </Key>
+		<Key ID="STR_ASL_GUNNER">
+            <Original>Gunners</Original>
+            <German>Kanoniere</German>
+        </Key>
+		<Key ID="STR_ASL_GUNNER_TIP">
+            <Original>Gunner are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Kanoniere sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
+        </Key>
+		<Key ID="STR_ASL_PASSENGER">
+            <Original>Passengers</Original>
+            <German>Passagiere</German>
+        </Key>
+		<Key ID="STR_ASL_PASSENGER_TIP">
+            <Original>Passengers are authorized to manipulate vehicle ropes (deploy, retract, extend, shorten, release cargo).</Original>
+            <German>Passagiere sind berechtigt, Seile von Fahrzeugen zu manipulieren (ausfahren, einfahren, verlängern, kürzen, Ladung ablösen).</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DEPLOY_HEIGHT">
+            <Original>Maximum Deploy Height</Original>
+            <German>Maximale Ausfahrhöhe</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_DEPLOY_HEIGHT_TIP">
+            <Original>Maximal Height in meter above ground, up to which vehicle ropes are allowed to be deployed.</Original>
+            <German>Maximalhöhe in Meter über Grund, bis zu welcher Frachtseile ausgefahren werden dürfen.</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS">
+            <Original>Minimum Vehicle Mass</Original>
+            <German>Minimales Fahrzeuggewicht</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_TIP">
+            <Original>Minimal mass in kilogram a vehicle has to have, for ropes to be able to be deployed from that vehicle.</Original>
+            <German>Minimales Gewicht in Kilogramm, das ein Fahrzeug haben muss, um Frachtseile von diesem Fahrzeug ausfahren zu können.</German>
+        </Key>
+		<Key ID="STR_ASL_INITIAL_DEPLOY">
+            <Original>Deploy Rope Length</Original>
+            <German>Ausfahrseillänge</German>
+        </Key>
+		<Key ID="STR_ASL_INITIAL_DEPLOY_TIP">
+            <Original>Initial length (meter) of a rope being deployed.</Original>
+            <German>Initiallänge des Seils (Meter), wenn es ausgefahren wird.</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_SHORTEN">
+            <Original>Extend / Shorten Rope Length</Original>
+            <German>Ausfahr- / Kürzseillänge</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_SHORTEN_TIP">
+            <Original>Length (meter) added or taken from a rope, that is extended / shortened.</Original>
+            <German>Hinzugegebene oder abgezogene Länge (Meter) von einem Seil, das ausgefarhen / gekürzt wird.</German>
+        </Key>
+		<Key ID="STR_ASL_DEFAULT_MASS">
+            <Original>Default Liftable Mass</Original>
+            <German>Standardschlinglastmasse</German>
+        </Key>
+		<Key ID="STR_ASL_DEFAULT_MASS_TIP">
+            <Original>Default liftable mass in kg a vehicle can lift.</Original>
+            <German>Standardschlinglastmasse in kg, die ein Fahrzeug anheben kann.</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_MASS">
+            <Original>Maximum Liftable Mass Factor</Original>
+            <German>Maximalschlinglastmassenfaktor</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_MASS_TIP">
+            <Original>Maximum liftable mass factor a vehicle can lift (factor * vehicle lift capabilty).</Original>
+            <German>Faktor, der die Maximalschlinglastmasse bestimmt (Faktor * Fahrzeughebekapazität).</German>
+        </Key>
+		<Key ID="STR_ASL_DEPLOY">
+            <Original>Deploy Cargo Ropes</Original>
+            <German>Frachtseile Ausfahren</German>
+        </Key>
+		<Key ID="STR_ASL_RETRACT">
+            <Original>Retract Cargo Ropes</Original>
+            <German>Frachtseile Einfahren</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND">
+            <Original>Extend Cargo Ropes</Original>
+            <German>Frachtseile Verlängern</German>
+        </Key>
+		<Key ID="STR_ASL_SHORTEN">
+            <Original>Shorten Cargo Ropes</Original>
+            <German>Frachtseile Verkürzen</German>
+        </Key>
+		<Key ID="STR_ASL_RELEASE">
+            <Original>Release Cargo</Original>
+            <German>Fracht Ablösen</German>
+        </Key>
+		<Key ID="STR_ASL_PICKUP">
+            <Original>Pickup Cargo Ropes</Original>
+            <German>Frachtseile Aufnehmen</German>
+        </Key>
+		<Key ID="STR_ASL_DROP">
+            <Original>Drop Cargo Ropes</Original>
+            <German>Frachtseile Fallen Lassen</German>
+        </Key>
+		<Key ID="STR_ASL_ATTACH">
+            <Original>Attach To Cargo Ropes</Original>
+            <German>An Frachtseile Befestigen</German>
+        </Key>
+		<Key ID="STR_ASL_CANNOT_DEPLOY">
+            <Original>Cannot deploy cargo ropes from locked vehicle</Original>
+            <German>Frachtseile können nicht von verschlossenen Fahrzeugen aus ausgefahren werden</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES">
+            <Original>Deploy Ropes</Original>
+            <German>Seile Ausfahren</German>
+        </Key>
+		<Key ID="STR_ASL_SINGLE">
+            <Original>For Single Cargo</Original>
+            <German>Für Einzellne Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_DOUBLE">
+            <Original>For Double Cargo</Original>
+            <German>Für Doppelte Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_TRIPLE">
+            <Original>For Triple Cargo</Original>
+            <German>Für Dreifache Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_DOESNT_SUPPORT">
+            <Original>Vehicle doesn't support cargo ropes</Original>
+            <German>Fahrzeug unterstützt keine Frachtseile</German>
+        </Key>
+		<Key ID="STR_ASL_DOESNT_SUPPORT_X">
+            <Original>Vehicle doesn't support %1 cargo ropes</Original>
+            <German>Fahrzeug unterstützt keine %1 Frachtseile</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY">
+            <Original>Vehicle already has cargo ropes deployed</Original>
+            <German>Fahrzeug hat bereits Frachtseile ausgefahren</German>
+        </Key>
+		<Key ID="STR_ASL_TOO_SHORT">
+            <Original>Cargo ropes too short. Extend ropes or move vehicle closer.</Original>
+            <German>Frachtseile zu kurz. Seile weiter ausfahren oder Fahrzeug näher fahren.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_ATTACH">
+            <Original>Cannot attach cargo ropes to locked vehicle.</Original>
+            <German>Frachtseile können nicht an verschlossenen Fahrzeugen befestigt werden.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_SAFE">
+            <Original>Cannot attach cargo ropes in safe zone.</Original>
+            <German>Frachtseile können in sicheren Zonen nicht bfestigt werden.</German>
+        </Key>
+		<Key ID="STR_ASL_CANT_PICKUP">
+            <Original>Cannot pick up cargo ropes from locked vehicle.</Original>
+            <German>Frachtseile verschlossener Fahrzeuge können nicht aufgenommen werden.</German>
+        </Key>
+		<Key ID="STR_ASL_ALL">
+            <Original>All</Original>
+            <German>Alle</German>
+        </Key>
+		<Key ID="STR_ASL_CARGO">
+            <Original>Cargo</Original>
+            <German>Fracht</German>
+        </Key>
+		<Key ID="STR_ASL_ROPE">
+            <Original>Ropes</Original>
+            <German>Seile</German>
+        </Key>
+		<Key ID="STR_ASL_FRONT">
+            <Original>Front</Original>
+            <German>Front</German>
+        </Key>
+		<Key ID="STR_ASL_REAR">
+            <Original>Rear</Original>
+            <German>Heck</German>
+        </Key>
+		<Key ID="STR_ASL_CENTER">
+            <Original>Center</Original>
+            <German>Zentral</German>
+        </Key>
+		<Key ID="STR_ASL_SUCCESS">
+            <Original>Success</Original>
+            <German>Erfolgreich</German>
+        </Key>
+		<Key ID="STR_ASL_WHOOPS">
+            <Original>Whoops</Original>
+            <German>Uups</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_DEPLOYED">
+            <Original>Ropes deployed (%1 m)</Original>
+            <German>Seile ausgefahren (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED">
+            <Original>Ropes extended</Original>
+            <German>Seile verlängert</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TG">
+            <Original>%1 to Ground</Original>
+            <German>%1 auf Grund</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO">
+            <Original>Ropes extended to %1 m</Original>
+            <German>Seile auf %1 m verlängert</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO_G">
+            <Original>Ropes extended to ground (%1 m)</Original>
+            <German>Seile auf Grund verlängert (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_EXTENDED_TO_IND">
+            <Original>%1 ropes %2 m</Original>
+            <German>%1 Seile %2 m</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY_MAX_LENGTH">
+            <Original>Ropes already at maximum lenghth (%1 m)</Original>
+            <German>Seile bereits auf Maximallänge (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED">
+            <Original>Ropes shortened</Original>
+            <German>Seile verkürzt</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED_TO">
+            <Original>Ropes shortened to %1 m</Original>
+            <German>Seile auf %1 m verkürzt</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_SHORTENED_TO_IND">
+            <Original>%1 ropes %2 m</Original>
+            <German>%1 Seile %2 m</German>
+        </Key>
+		<Key ID="STR_ASL_ALREADY_MIN_LENGTH">
+            <Original>Ropes already at minimum length (%1 m)</Original>
+            <German>Seile bereits auf Minimallänge (%1 m)</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_DROP">
+            <Original>Minimum Rope Length Drop Cargo</Original>
+            <German>Minimalseillänge Ladung Lösen</German>
+        </Key>
+		<Key ID="STR_ASL_MIN_MASS_DROP_TIP">
+            <Original>Drop cargo, when ropes were already retracted to their minimal length, and ropes are retracted once more.</Original>
+            <German>Ladung Lösen, wenn Seile bereits auf Minimalseillänge verkürzt wurden, und Seile ein weiteres mal verkürzt werden.</German>
+        </Key>
+		<Key ID="STR_DROP_CARGO_KEY">
+            <Original>Drop Cargo</Original>
+            <German>Ladung Lösen</German>
+        </Key>
+		<Key ID="STR_DROP_CARGO_KEY_TIP">
+            <Original>Drop all cargo and retract all ropes.</Original>
+            <German>Alle Ladung Lösen und alle Seile einfahren.</German>
+		</Key>
+		<Key ID="STR_ROPE_HANDLING_DIST">
+            <Original>Rope Handling Distance</Original>
+            <German>Seilmanipulationsentfernung</German>
+        </Key>
+		<Key ID="STR_ROPE_HANDLING_DIST_TIP">
+            <Original>Rope hanling distance in meter from a unit to a rope end.</Original>
+            <German>Seilmanipulationsentfernung in meter von einer Einheit zu einem Seilende.</German>
+        </Key>
+		<Key ID="STR_ASL_ROPES_RETRACTED">
+            <Original>Ropes Retracted</Original>
+            <German>Seile Eingefahren</German>
+        </Key>
+		<Key ID="STR_ASL_EXTEND_TG">
+            <Original>Extend Cargo Ropes To Ground</Original>
+            <German>Frachtseile Bis Grund Verlängern</German>
+        </Key>
+		
+		<Key ID="STR_ROPE_MESSAGES">
+            <Original>Rope Change Messages</Original>
+            <German>Seilveränderungsbenachrichtigungen</German>
+        </Key>
+		<Key ID="STR_ROPE_MESSAGES_TIP">
+            <Original>Show rope changes to players via hints (rope length, etc.).</Original>
+            <German>Spieler erhalten per Hinweise Informationen über Seilveränderungen (Seillänge, etc.).</German>
+        </Key>
+	</Package>
+</Project>
