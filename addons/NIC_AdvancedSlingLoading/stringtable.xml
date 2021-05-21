@@ -101,14 +101,6 @@
             <Original>Default liftable mass in kg a vehicle can lift.</Original>
             <German>Standardschlinglastmasse in kg, die ein Fahrzeug anheben kann.</German>
         </Key>
-		<Key ID="STR_ASL_MAX_MASS">
-            <Original>Maximum Liftable Mass Factor</Original>
-            <German>Maximalschlinglastmassenfaktor</German>
-        </Key>
-		<Key ID="STR_ASL_MAX_MASS_TIP">
-            <Original>Maximum liftable mass factor a vehicle can lift (factor * vehicle lift capabilty).</Original>
-            <German>Faktor, der die Maximalschlinglastmasse bestimmt (Faktor * Fahrzeughebekapazität).</German>
-        </Key>
 		<Key ID="STR_ASL_DEPLOY">
             <Original>Deploy Cargo Ropes</Original>
             <German>Frachtseile Ausfahren</German>
@@ -140,6 +132,10 @@
 		<Key ID="STR_ASL_ATTACH">
             <Original>Attach To Cargo Ropes</Original>
             <German>An Frachtseile Befestigen</German>
+        </Key>
+        <Key ID="STR_ASL_SELF_ATTACH">
+            <Original>Self Attach To Cargo Ropes</Original>
+            <German>Sich Selbst An Frachtseile Befestigen</German>
         </Key>
 		<Key ID="STR_ASL_CANNOT_DEPLOY">
             <Original>Cannot deploy cargo ropes from locked vehicle</Original>
@@ -297,7 +293,6 @@
             <Original>Extend Cargo Ropes To Ground</Original>
             <German>Frachtseile Bis Grund Verlängern</German>
         </Key>
-		
 		<Key ID="STR_ROPE_MESSAGES">
             <Original>Rope Change Messages</Original>
             <German>Seilveränderungsbenachrichtigungen</German>
@@ -305,6 +300,62 @@
 		<Key ID="STR_ROPE_MESSAGES_TIP">
             <Original>Show rope changes to players via hints (rope length, etc.).</Original>
             <German>Spieler erhalten per Hinweise Informationen über Seilveränderungen (Seillänge, etc.).</German>
+        </Key>
+        <!-- <Key ID="STR_ASL_SLING_MASS">
+            <Original>Load (%1 t) attached.</Original>
+            <German>Ladung (%1 t) befestigt.</German>
+        </Key> -->
+        <Key ID="STR_ASL_SLING_MASS">
+            <Original>Load attached.</Original>
+            <German>Ladung befestigt.</German>
+        </Key>
+        <Key ID="STR_ASL_SLING_MASS_REMAINING">
+            <Original>%1 t of %2 t remaining.</Original>
+            <German>Verbleibend: %1 t von %2 t.</German>
+        </Key>
+        <Key ID="STR_ASL_OVERLOAD">
+            <Original>WARNING! Vehicle overloaded!</Original>
+            <German>WARNUNG! Fahrzeug überladen!</German>
+        </Key>
+         <Key ID="STR_ASL_OVERLOAD_MASS">
+            <Original>Total load: %1 t, Max load: %2 t.</Original>
+            <German>Gesammtlast: %1 t, Maximallast %2 t.</German>
+        </Key>
+        <Key ID="STR_ROPE_UNWIND_SPEED">
+            <Original>Rope Unwind Speed</Original>
+            <German>Seillängenänderungsgeschwindigkeit</German>
+        </Key>
+		<Key ID="STR_ROPE_UNWIND_SPEED_TIP">
+            <Original>Speed of rope length changes in merter per second.</Original>
+            <German>Geschwindigkeit von Seillängenveränderungen in Meter pro Sekunde.</German>
+        </Key>
+        <Key ID="STR_HEAVY_LIFTING">
+            <Original>Heavy Lifting</Original>
+            <German>Schwerlast</German>
+        </Key>
+		<Key ID="STR_HEAVY_LIFTING_TIP">
+            <Original>Allow lifting of masses heavyer than default lifting capability.</Original>
+            <German>Heben schwererer Massen erlauben, als die Standardmaximalschlinglast.</German>
+        </Key>
+        <Key ID="STR_ASL_MAX_MASS">
+            <Original>Heavy Lifting Max Mass Factor</Original>
+            <German>Schwerlast Maximalschlinglastmassenfaktor</German>
+        </Key>
+		<Key ID="STR_ASL_MAX_MASS_TIP">
+            <Original>Maximum liftable mass factor a vehicle can lift (e.g. CH-47 has a default of 12t max mass. A factor of 5 would result: 5 * 12 = 60t max liftable mass. Only valid with 'Heavy Lifting Max Mass Factor' allowed).</Original>
+            <German>Faktor, der die Maximalschlinglastmasse bestimmt (z.b. hat der CH-47 eine Standardmaximalschlinglast von 12t. Ein Faktor von 5 heißt: 5 * 12 = 60t Maximalschlinglast. Nur gültig wenn 'Schwerlast Maximalschlinglastmassenfaktor' erlaubt).</German>
+        </Key>
+         <Key ID="STR_ASL_SELF_ATTACH">
+            <Original>Allow Self Attach</Original>
+            <German>Erlaube Selbstbefestigung</German>
+        </Key>
+		<Key ID="STR_ASL_SELF_ATTACH_TIP">
+            <Original>Allow self attachment to cargo ropes.</Original>
+            <German>Selbstbefestigung an Lastseile erlauben.</German>
+        </Key>
+        <Key ID="STR_ASL_DETACH">
+            <Original>Detach From Ropes</Original>
+            <German>Von Seilen Loslösen</German>
         </Key>
 	</Package>
 </Project>

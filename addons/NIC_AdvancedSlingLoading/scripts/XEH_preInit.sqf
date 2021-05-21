@@ -101,15 +101,6 @@
     true
 ] call CBA_fnc_addSetting;
 [
-	"ASL_MaxLiftableMassFactor",
-	"SLIDER",
-	[format[localize "STR_ASL_MAX_MASS"], format[localize "STR_ASL_MAX_MASS_TIP"]],
-	format[localize "STR_ASL_TITLE"],
-	[1, 20, 8, 0],
-    true,
-	{ASL_MaxLiftableMassFactor = round(ASL_MaxLiftableMassFactor)}
-] call CBA_fnc_addSetting;
-[
 	"ASL_MinRopeLengthDropCargo",
     "CHECKBOX",
 	[format[localize "STR_ASL_MIN_MASS_DROP"], format[localize "STR_ASL_MIN_MASS_DROP_TIP"]],
@@ -130,6 +121,40 @@
 	"ASL_RopeMessagesAuthorized",
     "CHECKBOX",
 	[format[localize "STR_ROPE_MESSAGES"], format[localize "STR_ROPE_MESSAGES_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	true,
+    true
+] call CBA_fnc_addSetting;
+[
+	"ASL_RopeUnwindSpeed",
+	"SLIDER",
+	[format[localize "STR_ROPE_UNWIND_SPEED"], format[localize "STR_ROPE_UNWIND_SPEED_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[1, 10, 3, 0],
+    true,
+	{ASL_RopeUnwindSpeed = round(ASL_RopeUnwindSpeed)}
+] call CBA_fnc_addSetting;
+[
+	"ASL_HeavyLiftAuthorized",
+    "CHECKBOX",
+	[format[localize "STR_HEAVY_LIFTING"], format[localize "STR_HEAVY_LIFTING_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	true,
+    true
+] call CBA_fnc_addSetting;
+[
+	"ASL_MaxLiftableMassFactor",
+	"SLIDER",
+	[format[localize "STR_ASL_MAX_MASS"], format[localize "STR_ASL_MAX_MASS_TIP"]],
+	format[localize "STR_ASL_TITLE"],
+	[2, 20, 8, 0],
+    true,
+	{ASL_MaxLiftableMassFactor = round(ASL_MaxLiftableMassFactor)}
+] call CBA_fnc_addSetting;
+[
+	"ASL_SelfAttachAuthorized",
+    "CHECKBOX",
+	[format[localize "STR_ASL_SELF_ATTACH"], format[localize "STR_ASL_SELF_ATTACH_TIP"]],
 	format[localize "STR_ASL_TITLE"],
 	true,
     true
