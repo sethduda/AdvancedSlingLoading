@@ -301,10 +301,6 @@
             <Original>Show rope changes to players via hints (rope length, etc.).</Original>
             <German>Spieler erhalten per Hinweise Informationen über Seilveränderungen (Seillänge, etc.).</German>
         </Key>
-        <!-- <Key ID="STR_ASL_SLING_MASS">
-            <Original>Load (%1 t) attached.</Original>
-            <German>Ladung (%1 t) befestigt.</German>
-        </Key> -->
         <Key ID="STR_ASL_SLING_MASS">
             <Original>Load attached.</Original>
             <German>Ladung befestigt.</German>
@@ -356,6 +352,10 @@
         <Key ID="STR_ASL_DETACH">
             <Original>Detach From Ropes</Original>
             <German>Von Seilen Loslösen</German>
+        </Key>
+		<Key ID="STR_ASL_FREIGHT_GROUND">
+            <Original>%1 on ground</Original>
+            <German>%1 auf grund</German>
         </Key>
 	</Package>
 </Project>

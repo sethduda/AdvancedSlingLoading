@@ -727,7 +727,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Release_Cargo_Action = {
 		params [["_vehicle", objNull], ["_unit", objNull]];
-		diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Release_Cargo_Action) _vehicle: ", _vehicle, "    _unit: ", _unit];
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Release_Cargo_Action) _vehicle: ", _vehicle, "    _unit: ", _unit];
 		if (isNull _vehicle || isNull _unit) exitWith {false};
 		if !([_vehicle, _unit] call ASL_Can_Release_Cargo) exitWith {false};
 		private _activeRopes = [_vehicle, _unit] call ASL_Get_Active_Ropes_With_Cargo;	
@@ -739,7 +739,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Release_Cargo_Index_Action = {
 		params [["_ropesIndex", 0], ["_vehicle", objNull], ["_unit", objNull]];
-		diag_log formatText ["%1%2%3%4%5%6%7", time, "s  (ASL_Release_Cargo_Index_Action) _vehicle: ", _vehicle, ", _unit: ", _unit, ", _ropesIndex: ", _ropesIndex];
+		// diag_log formatText ["%1%2%3%4%5%6%7", time, "s  (ASL_Release_Cargo_Index_Action) _vehicle: ", _vehicle, ", _unit: ", _unit, ", _ropesIndex: ", _ropesIndex];
 		if (isNull _vehicle || isNull _unit) exitWith {};
 		if (_ropesIndex >= 0 && [_vehicle, _unit] call ASL_Can_Release_Cargo) then {
 			[_vehicle, _unit, _ropesIndex] call ASL_Release_Cargo;
@@ -757,12 +757,33 @@ ASL_Advanced_Sling_Loading_Install = {
 		{
 			_existingCargo ropeDetach _x;
 		} forEach _existingRopes;
+		private _displayName = [_existingCargo] call ASL_Get_Display_Name;
+		if (_displayName != "") then {
+			_unit groupChat format[localize "STR_ASL_FREIGHT_GROUND", _displayName];
+		};
 		private _allCargo = _vehicle getVariable ["ASL_Cargo", []];
 		_allCargo set [_ropesIndex, objNull];
 		_vehicle setVariable ["ASL_Cargo", _allCargo, true];
 		_this call ASL_Retract_Ropes;
 	};
 	
+	ASL_Get_Display_Name = {
+		params [["_object", objNull]];
+		if (isNull _object || !alive _object) exitWith {""};
+		private ["_type"];
+		if ((typeName _object) == "OBJECT") then {
+			_type = (typeof _object);
+		} else {
+			_type = _object;
+		};
+		private _cfg_type = "CfgVehicles";
+		{
+			if (isClass(configFile >> _x >> _type)) exitWith {_cfg_type = _x};
+		} forEach ["CfgMagazines", "CfgWeapons", "CfgGlasses"];
+		private _return = getText (configFile >> _cfg_type >> _type >> "displayName");
+		_return
+	};
+
 	ASL_Retract_Ropes_Action_Check = {
 		params [["_vehicle", objNull], ["_unit", objNull]];
 		if (isNull _vehicle || isNull _unit) exitWith {false};
@@ -1008,6 +1029,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		params [["_vehicle", objNull], ["_unit", objNull], ["_cargoCount", 1]];
 		if (isNull _vehicle || isNull _unit) exitWith {false};
 		if !(local _vehicle) exitWith {[_this, "ASL_Deploy_Ropes", _vehicle, true] call ASL_RemoteExec};
+		if (!alive _vehicle) exitWith {[_vehicle] call ASL_Add_Vehicle_Actions};
 		private _existingRopes = _vehicle getVariable ["ASL_Ropes", []];
 		if (count _existingRopes > 0) exitWith {
 			if (_unit == player) then {[[format[localize "STR_ASL_ALREADY"], false], "ASL_Hint", _unit] call ASL_RemoteExec};
@@ -1437,7 +1459,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		if (isNull _vehicle) exitWith {};
 		if !([_vehicle] call ASL_Is_Supported_Vehicle) exitWith {};
 		// diag_log formatText ["%1%2%3%4%5%6%7", time, "s  (ASL_Add_Vehicle_Actions)	_vehicle: ", _vehicle, ", mass: ", getMass _vehicle, ", min: ", ASL_MinVehicleMass];
-		if (getMass _vehicle < ASL_MinVehicleMass) exitWith {
+		if (getMass _vehicle < ASL_MinVehicleMass || !alive _vehicle) exitWith {
 			[_vehicle, ["ASL_ActionID_Deploy", "ASL_ActionID_Retract", "ASL_ActionID_Extend", "ASL_ActionID_Shorten", "ASL_ActionID_Release"]] call ASL_Remove_Actions;
 		};
 		private ["_actionID"];
