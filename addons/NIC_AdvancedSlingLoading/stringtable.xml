@@ -133,10 +133,10 @@
             <Original>Attach To Cargo Ropes</Original>
             <German>An Frachtseile Befestigen</German>
         </Key>
-        <Key ID="STR_ASL_SELF_ATTACH">
-            <Original>Self Attach To Cargo Ropes</Original>
-            <German>Sich Selbst An Frachtseile Befestigen</German>
-        </Key>
+        <!-- <Key ID="STR_ASL_SELF_ATTACH"> -->
+            <!-- <Original>Self Attach To Cargo Ropes</Original> -->
+            <!-- <German>Sich Selbst An Frachtseile Befestigen</German> -->
+        <!-- </Key> -->
 		<Key ID="STR_ASL_CANNOT_DEPLOY">
             <Original>Cannot deploy cargo ropes from locked vehicle</Original>
             <German>Frachtseile können nicht von verschlossenen Fahrzeugen aus ausgefahren werden</German>
@@ -337,14 +337,14 @@
             <Original>Heavy Lifting Max Mass Factor</Original>
             <German>Schwerlast Maximalschlinglastmassenfaktor</German>
         </Key>
-		<Key ID="STR_ASL_MAX_MASS_TIP">
-            <Original>Maximum liftable mass factor a vehicle can lift (e.g. CH-47 has a default of 12t max mass. A factor of 5 would result: 5 * 12 = 60t max liftable mass. Only valid with 'Heavy Lifting Max Mass Factor' allowed).</Original>
-            <German>Faktor, der die Maximalschlinglastmasse bestimmt (z.b. hat der CH-47 eine Standardmaximalschlinglast von 12t. Ein Faktor von 5 heißt: 5 * 12 = 60t Maximalschlinglast. Nur gültig wenn 'Schwerlast Maximalschlinglastmassenfaktor' erlaubt).</German>
-        </Key>
-         <Key ID="STR_ASL_SELF_ATTACH">
-            <Original>Allow Self Attach</Original>
-            <German>Erlaube Selbstbefestigung</German>
-        </Key>
+		<!-- <Key ID="STR_ASL_MAX_MASS_TIP"> -->
+            <!-- <Original>Maximum liftable mass factor a vehicle can lift (e.g. CH-47 has a default of 12t max mass. A factor of 5 would result: 5 * 12 = 60t max liftable mass. Only valid with 'Heavy Lifting Max Mass Factor' allowed).</Original> -->
+            <!-- <German>Faktor, der die Maximalschlinglastmasse bestimmt (z.b. hat der CH-47 eine Standardmaximalschlinglast von 12t. Ein Faktor von 5 heißt: 5 * 12 = 60t Maximalschlinglast. Nur gültig wenn 'Schwerlast Maximalschlinglastmassenfaktor' erlaubt).</German> -->
+        <!-- </Key> -->
+        <!-- <Key ID="STR_ASL_SELF_ATTACH"> -->
+            <!-- <Original>Allow Self Attach</Original> -->
+            <!-- <German>Erlaube Selbstbefestigung</German> -->
+        <!-- </Key> -->
 		<Key ID="STR_ASL_SELF_ATTACH_TIP">
             <Original>Allow self attachment to cargo ropes.</Original>
             <German>Selbstbefestigung an Lastseile erlauben.</German>

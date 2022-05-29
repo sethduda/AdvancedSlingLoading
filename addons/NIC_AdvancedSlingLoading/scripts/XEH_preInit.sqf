@@ -151,11 +151,11 @@
     true,
 	{ASL_MaxLiftableMassFactor = round(ASL_MaxLiftableMassFactor)}
 ] call CBA_fnc_addSetting;
-[
-	"ASL_SelfAttachAuthorized",
-    "CHECKBOX",
-	[format[localize "STR_ASL_SELF_ATTACH"], format[localize "STR_ASL_SELF_ATTACH_TIP"]],
-	format[localize "STR_ASL_TITLE"],
-	true,
-    true
-] call CBA_fnc_addSetting;
+// [
+	// "ASL_SelfAttachAuthorized",
+    // "CHECKBOX",
+	// [format[localize "STR_ASL_SELF_ATTACH"], format[localize "STR_ASL_SELF_ATTACH_TIP"]],
+	// format[localize "STR_ASL_TITLE"],
+	// true,
+    // true
+// ] call CBA_fnc_addSetting;
