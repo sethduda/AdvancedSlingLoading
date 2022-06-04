@@ -1404,7 +1404,7 @@ ASL_Advanced_Sling_Loading_Install = {
 		[_unit, ["ASL_ActionID_Attach", "ASL_ActionID_Drop", "ASL_ActionID_Detach"]] call ASL_Remove_Actions;		// remove 'attach ropes', 'drop ropes' and 'detach ropes' actions, once unit has dropped ropes
 		_unit setVariable ["ASL_Ropes_Pick_Up_Helper", nil, true];
 	};
-
+	
 	ASL_SUPPORTED_VEHICLES = [
 		"Helicopter",
 		"VTOL_Base_F"
@@ -1417,11 +1417,19 @@ ASL_Advanced_Sling_Loading_Install = {
 		{
 			if (_vehicle isKindOf _x) exitWith {_isSupported = true};
 		} forEach (missionNamespace getVariable ["ASL_SUPPORTED_VEHICLES_OVERRIDE", ASL_SUPPORTED_VEHICLES]);
-		_isSupported;
+		_isSupported
 	};
 	
+	// ASL_SLING_RULES = [
+		// ["All", "CAN_SLING", "All"]
+	// ];
+	
 	ASL_SLING_RULES = [
-		["All", "CAN_SLING", "All"]
+		["Air", "CAN_SLING", "Car"],
+		["Air", "CAN_SLING", "Tank"],
+		["Air", "CAN_SLING", "Air"],
+		["Air", "CAN_SLING", "Boat_F"],
+		["Air", "CAN_SLING", "ReammoBox_F"]
 	];
 	
 	ASL_Is_Supported_Cargo = {
@@ -1437,23 +1445,20 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_Hint = {
 		params ["_msg", ["_isSuccess", true]];
-		if (!isNil "ExileClient_gui_notification_event_addNotification") then {
-			if (_isSuccess) then {
-				[format[localize "STR_ASL_SUCCESS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
-			} else {
-				[format[localize "STR_ASL_WHOOPS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
-			};
+		if (isNil "ExileClient_gui_notification_event_addNotification") exitWith {hint _msg};
+		if (_isSuccess) then {
+			[format[localize "STR_ASL_SUCCESS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
 		} else {
-			hint _msg;
+			[format[localize "STR_ASL_WHOOPS"], [_msg]] call ExileClient_gui_notification_event_addNotification; 
 		};
 	};
-
+	
 	ASL_Switch_Vehicles_Actions = {
 		{
 			[_x] call ASL_Add_Vehicle_Actions;
 		} foreach vehicles;
 	};
-
+	
 	ASL_Add_Vehicle_Actions = {
 		params [["_vehicle", objNull]];
 		if (isNull _vehicle) exitWith {};
@@ -1542,7 +1547,7 @@ ASL_Advanced_Sling_Loading_Install = {
 			_vehicle setVariable ["ASL_ActionID_Release", _actionID];
 		};
 	};
-
+	
 	ASL_Remove_Actions = {
 		params [["_object", objNull], ["_actions", []]];
 		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Remove_Actions) _object: ", _object, "    _actions: ", _actions];
@@ -1564,28 +1569,20 @@ ASL_Advanced_Sling_Loading_Install = {
 	
 	ASL_RemoteExec = {
 		params ["_params", "_functionName", "_target", ["_isCall", false]];
-		if (!isNil "ExileClient_system_network_send") then {
-			["AdvancedSlingLoadingRemoteExecClient", [_params, _functionName, _target, _isCall]] call ExileClient_system_network_send;
-		} else {
-			if (_isCall) then {
-				_params remoteExecCall [_functionName, _target];
-			} else {
-				_params remoteExec [_functionName, _target];
-			};
+		if (isNil "ExileClient_system_network_send") exitWith {
+			if (_isCall) exitWith {_params remoteExecCall [_functionName, _target]};
+			_params remoteExec [_functionName, _target];
 		};
+		["AdvancedSlingLoadingRemoteExecClient", [_params, _functionName, _target, _isCall]] call ExileClient_system_network_send;
 	};
 	
 	ASL_RemoteExecServer = {
 		params ["_params", "_functionName", ["_isCall", false]];
-		if (!isNil "ExileClient_system_network_send") then {
-			["AdvancedSlingLoadingRemoteExecServer", [_params, _functionName, _isCall]] call ExileClient_system_network_send;
-		} else {
-			if (_isCall) then {
-				_params remoteExecCall [_functionName, 2];
-			} else {
-				_params remoteExec [_functionName, 2];
-			};
+		if (isNil "ExileClient_system_network_send") exitWith {
+			if (_isCall) exitWith {_params remoteExecCall [_functionName, 2]};
+			_params remoteExec [_functionName, 2];
 		};
+		["AdvancedSlingLoadingRemoteExecServer", [_params, _functionName, _isCall]] call ExileClient_system_network_send;
 	};
 	
 	if (isServer) then {
