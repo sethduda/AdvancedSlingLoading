@@ -806,7 +806,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	ASL_Can_Retract_Ropes = {
 		params [["_vehicle", objNull], ["_unit", objNull], ["_distanceCheck", false]];
 		if (isNull _vehicle || isNull _unit) exitWith {};
-		if (_distanceCheck && _unit distance _vehicle > ASL_MaxDeployRetractDistance) exitWith {
+		if (_distanceCheck && _unit distance _vehicle > ASL_MaxDeployRetractDistance + (sizeOf typeOf _cargo / 10 max 1)) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Retract_Ropes) EXIT 1"];
 			false
 		};
@@ -942,7 +942,7 @@ ASL_Advanced_Sling_Loading_Install = {
 	ASL_Can_Deploy_Ropes = {
 		params [["_vehicle", objNull], ["_unit", objNull], ["_distanceCheck", false]];
 		if (isNull _vehicle || isNull _unit) exitWith {false};
-		if (_distanceCheck && _unit distance _vehicle > ASL_MaxDeployRetractDistance) exitWith {
+		if (_distanceCheck && _unit distance _vehicle > ASL_MaxDeployRetractDistance + (sizeOf typeOf _cargo / 10 max 1)) exitWith {
 			// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Can_Deploy_Ropes) EXIT 1"];
 			false
 		};
@@ -1276,10 +1276,15 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _cargo = cursorTarget;
 		if (_self && ASL_SelfAttachAuthorized) then {_cargo = _unit};
 		private _vehicle = (_unit getVariable ["ASL_Ropes_Vehicle", [objNull, 0]]) #0;
-		private _ropeHandlingDistance = ASL_RopeHandlingDistance;
-		if (_unit != player) then {_ropeHandlingDistance = _ropeHandlingDistance + 5};			// AIs get higher range, as AIs sometimes can't get close enough to vehicles		
-		if (vehicle _unit != _unit || _unit distance _cargo > _ropeHandlingDistance || _vehicle == _cargo || !alive _cargo) exitWith {false};
+		// private _ropeAttachDistance = ASL_RopeHandlingDistance;
+		// private _ropeAttachDistance = ASL_RopeHandlingDistance + (sizeOf typeOf _cargo / 10 max 2);
+		private _ropeAttachDistance = ASL_MaxDeployRetractDistance + (sizeOf typeOf _cargo / 10 max 1);	
+		if (_unit != player) then {_ropeAttachDistance = _ropeAttachDistance + 5};			// AIs get higher range, as AIs sometimes can't get close enough to vehicles		
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Attach_Ropes_Action_Check) check 1"];
+		if (vehicle _unit != _unit || _unit distance _cargo > _ropeAttachDistance || _vehicle == _cargo || !alive _cargo) exitWith {false};
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Attach_Ropes_Action_Check) check 2"];
 		if (_vehicle == _cargo getVariable ["ASL_CarrierVehicle", objNull]) exitWith {false};	// let's not attach another rope from same vehicle to same cargo
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Attach_Ropes_Action_Check) check 2"];
 		if (_self && ASL_SelfAttachAuthorized) exitWith {true};
 		[_vehicle, _cargo] call ASL_Is_Supported_Cargo
 	};
@@ -1302,6 +1307,7 @@ ASL_Advanced_Sling_Loading_Install = {
 				};
 			};
 		};
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Attach_Ropes) _unit: ", _unit, ", _self: ", _self];
 		if (_canBeAttached) then {
 			[_cargo, _unit, _self] call ASL_Attach_Ropes;
 		};
@@ -1439,7 +1445,8 @@ ASL_Advanced_Sling_Loading_Install = {
 		private _canSling = false;
 		{
 			if (_vehicle isKindOf (_x #0) && _cargo isKindOf (_x #2) && (toUpper (_x #1)) == "CAN_SLING") exitWith {_canSling = true};
-		} forEach (missionNamespace getVariable ["ASL_SLING_RULES_OVERRIDE", ASL_SLING_RULES]);	
+		} forEach (missionNamespace getVariable ["ASL_SLING_RULES_OVERRIDE", ASL_SLING_RULES]);
+		// diag_log formatText ["%1%2%3%4%5", time, "s  (ASL_Is_Supported_Cargo)		_canSling: ", _canSling];
 		_canSling
 	};
 	
